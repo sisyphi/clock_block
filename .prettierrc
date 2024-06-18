@@ -1,13 +1,11 @@
 {
 	"useTabs": true,
 	"singleQuote": true,
-	"trailingComma": "all",
-	"printWidth": 250,
-	"svelteBracketNewLine": false,
-	"parser": "svelte",
+	"trailingComma": "none",
+	"printWidth": 200,
+	"jsxBracketSameLine": true,
 	"plugins": [
-		"prettier-plugin-svelte",
-		"prettier-plugin-tailwindcss"
+		"prettier-plugin-svelte"
 	],
 	"overrides": [
 		{
@@ -16,6 +14,5 @@
 				"parser": "svelte"
 			}
 		}
-	],
-	"tailwindConfig": "./tailwind.config.js"
+	]
 }

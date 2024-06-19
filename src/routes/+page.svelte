@@ -46,10 +46,10 @@
 
 <section>
 	<div>
-		<div>
+		<div class="flex flex-row items-center gap-4 p-4">
 			<input bind:value={slot_name} type="text" placeholder="Enter slot name" />
-			<button on:click={addSlot} type="button"><span>Create slot</span></button>
 			<ColorPicker bind:hex={slot_color} />
+			<button on:click={addSlot} type="button"><span>Create slot</span></button>
 		</div>
 		<div style:background-color={default_slot_color} class="flex flex-row items-center gap-4 p-4">
 			<p>Default slot</p>

@@ -60,7 +60,7 @@
 				<div style:background-color={slot.color} class="flex flex-row items-center gap-4 p-4">
 					<p>{slot.name}</p>
 					<ColorPicker bind:hex={slot.color} />
-					<button on:click={deleteSlot(slot.name)} type="button">Delete slot</button>
+					<button on:click={() => deleteSlot(slot.name)} type="button">Delete slot</button>
 				</div>
 			{/each}
 		</div>

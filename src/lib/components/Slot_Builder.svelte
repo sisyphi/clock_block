@@ -2,7 +2,6 @@
 	import ColorPicker from 'svelte-awesome-color-picker';
 
 	import { Button } from 'bits-ui';
-	import { Root } from 'postcss';
 
 	interface Slot {
 		name: string;

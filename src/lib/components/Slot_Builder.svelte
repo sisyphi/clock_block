@@ -1,6 +1,9 @@
 <script lang="ts">
 	import ColorPicker from 'svelte-awesome-color-picker';
 
+	import { Button } from 'bits-ui';
+	import { Root } from 'postcss';
+
 	interface Slot {
 		name: string;
 		color: string;
@@ -48,7 +51,7 @@
 	<div class="flex flex-row items-center gap-4 p-4">
 		<input bind:value={slot_name} type="text" placeholder="Enter slot name" />
 		<ColorPicker bind:hex={slot_color} />
-		<button on:click={addSlot} type="button"><span>Create slot</span></button>
+		<Button.Root on:click={addSlot}><span>Create slot</span></Button.Root>
 	</div>
 	<div style:background-color={default_slot_color} class="flex flex-row items-center gap-4 p-4">
 		<p>Default slot</p>
@@ -59,7 +62,7 @@
 			<div style:background-color={slot.color} class="flex flex-row items-center gap-4 p-4">
 				<p>{slot.name}</p>
 				<ColorPicker bind:hex={slot.color} />
-				<button on:click={() => deleteSlot(slot.name)} type="button">Delete slot</button>
+				<Button.Root on:click={() => deleteSlot(slot.name)}><span>Delete slot</span></Button.Root>
 			</div>
 		{/each}
 	</div>

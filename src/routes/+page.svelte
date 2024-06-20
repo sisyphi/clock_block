@@ -6,7 +6,7 @@
 	import Check from '$lib/icons/Check.svelte';
 	import { RadioGroup, Select, Label } from 'bits-ui';
 
-	let block_increment = '+0030';
+	let timeblock_increment = '+0030';
 	let increments = [
 		{
 			id: 'plus-fifteen-min',
@@ -93,14 +93,14 @@
 		// console.log(start_times);
 	}
 
-	createStartTime(block_increment);
+	createStartTime(timeblock_increment);
 </script>
 
 <section>
 	<div>
 		<div>
 			<h2>Timeblock Increments</h2>
-			<RadioGroup.Root bind:value={block_increment}>
+			<RadioGroup.Root bind:value={timeblock_increment}>
 				{#each increments as increment, idx}
 					<RadioGroup.Item id={increment.id} value={increment.value} class="flex flex-row items-center [&[data-state=checked]>svg]:hidden">
 						<!-- <RadioUnchecked class="text-[{'#0022ffa6'}]" /> -->
@@ -110,7 +110,7 @@
 					</RadioGroup.Item>
 				{/each}
 			</RadioGroup.Root>
-			<p>Increment: {block_increment}</p>
+			<p>Increment: {timeblock_increment}</p>
 		</div>
 		<div>
 			<h2>Start Time</h2>

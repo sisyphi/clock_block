@@ -1,7 +1,8 @@
 <script lang="ts">
 	import ColorPicker from 'svelte-awesome-color-picker';
+	import Check from '$lib/icons/Check.svelte';
 
-	import { Button } from 'bits-ui';
+	import { Label, RadioGroup, Button } from 'bits-ui';
 
 	interface Slot {
 		name: string;
@@ -10,12 +11,8 @@
 
 	let slots: Array<Slot> = [
 		{
-			name: 'Work',
-			color: '#2B2B2B'
-		},
-		{
-			name: 'Free',
-			color: '#321321'
+			name: 'Default',
+			color: '#ABABAB'
 		}
 	];
 
@@ -34,13 +31,23 @@
 			color: slot_color
 		};
 
-		slots = [new_slot, ...slots];
+		slots = [...slots, new_slot];
 	}
 
 	function deleteSlot(deleted_slot_name: string) {
 		let idx = slots.findIndex((s) => s.name === deleted_slot_name);
 		slots.splice(idx, 1);
 		slots = slots;
+	}
+
+	let active_slot_name: string = 'Default';
+
+	export let active_slot: Slot;
+
+	$: {
+		active_slot = slots.filter(function (slot: Slot) {
+			return slot.name == active_slot_name;
+		})[0];
 	}
 </script>
 
@@ -51,12 +58,20 @@
 		<Button.Root on:click={addSlot}><span>Create slot</span></Button.Root>
 	</div>
 	<div>
-		{#each slots as slot}
-			<div style:background-color={slot.color} class="flex flex-row items-center gap-4 p-4">
-				<p>{slot.name}</p>
-				<ColorPicker bind:hex={slot.color} />
-				<Button.Root on:click={() => deleteSlot(slot.name)}><span>Delete slot</span></Button.Root>
-			</div>
-		{/each}
+		<RadioGroup.Root bind:value={active_slot_name}>
+			{#each slots as slot, idx}
+				<div style:background-color={slot.color}>
+					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex flex-row items-center gap-4 p-4 hover:border-4 [&[data-state=checked]>svg]:hidden">
+						<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')}>{slot.name}</Label.Root>
+						<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
+
+						<ColorPicker bind:hex={slot.color} />
+						{#if idx != 0}
+							<Button.Root on:click={() => deleteSlot(slot.name)}><span>Delete slot</span></Button.Root>
+						{/if}
+					</RadioGroup.Item>
+				</div>
+			{/each}
+		</RadioGroup.Root>
 	</div>
 </div>

@@ -67,17 +67,19 @@
 	}
 
 	let timeblocks: Array<Timeblock> = createTimeblocks(blocks, start_block, end_block);
-	console.log(timeblocks);
+	$: timeblocks = createTimeblocks(blocks, start_block, end_block);
+
+	let active_slot: Slot;
 </script>
 
 <section>
 	<BlockBuilder bind:chosen_blocks={blocks} bind:chosen_increment={increment} bind:chosen_start_block={start_block} bind:chosen_end_block={end_block}></BlockBuilder>
-	<SlotBuilder></SlotBuilder>
+	<SlotBuilder bind:active_slot></SlotBuilder>
 
 	<div class="p-4">
 		{#each timeblocks as timeblock}
 			{#if timeblock.active_on_timetable}
-				<div class:background-color={timeblock.slot != undefined ? timeblock.slot.color : '#2B2B2B'} class="flex flex-row gap-2">
+				<div style:background-color={timeblock.slot != undefined ? timeblock.slot.color : '#2B2B2B'} class="flex flex-row gap-2 py-2 hover:bg-neutral-300">
 					<p>{timeblock.block}</p>
 					{#if timeblock.slot != undefined}
 						<p>{timeblock.slot.name}</p>

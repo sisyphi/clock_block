@@ -24,22 +24,37 @@
 		}
 	];
 
-	interface BlockSelectionOption {
+	interface BlockSelectionItem {
 		value: string;
 		label: string;
 	}
 
-	let start_times: Array<BlockSelectionOption>;
-	let end_times: Array<BlockSelectionOption>;
+	let start_times: Array<BlockSelectionItem>;
+	let end_times: Array<BlockSelectionItem>;
 
-	function createBlocks(increment: string, chosen_start_time: string, chosen_end_time: string) {
-		// TODO
-		// refactor: include start_time and end_time in the creation
-		// question: should I be able to start on weird increments? (e.g. start at 9:30AM; end at 9:45AM)
+	function formatBlocks(blocks: Array<string>, start_time: string, end_time: string) {
+		// if starting and ending hour are not in the proper format, default to returning all blocks
+		if (start_time.length != 4 || end_time.length != 4) return blocks;
 
-		let blocks = [];
-		let minute_values = ['00', '15', '30', '45'];
+		let start_hour = start_time.slice(0, 2);
+		let end_hour = end_time.slice(0, 2);
 
+		if (Number(start_hour) < 0 || Number(start_hour) >= 24) return blocks;
+		if (Number(end_hour) < 0 || Number(end_hour) >= 24) return blocks;
+
+		// format the blocks to the chosen start and end times
+		while (start_hour != blocks[0].slice(0, 2)) {
+			blocks.push(blocks.shift()!);
+		}
+
+		return blocks;
+	}
+
+	function createBlocks(increment: string) {
+		let blocks: Array<string> = [];
+		let minute_values: Array<string> = ['00', '15', '30', '45'];
+
+		// creates the list of all blocks with the increment provided
 		for (let hour = 0; hour < 24; hour++) {
 			let hour_value = ('0' + hour).slice(-2);
 
@@ -78,7 +93,7 @@
 	}
 
 	function createBlockSelectItems(increment: string, military_time: boolean, leading_zero: boolean) {
-		let blocks = createBlocks(increment, '0000', '2400');
+		let blocks = createBlocks(increment);
 		let blockSelectItems = [];
 
 		for (let idx = 0; idx < blocks.length; idx++) {
@@ -92,17 +107,32 @@
 	}
 
 	$: {
-		start_times = createBlockSelectItems(increment, false, false);
-		end_times = createBlockSelectItems(increment, false, false);
+		let blockSelectItems = createBlockSelectItems(increment, false, false);
+		start_times = blockSelectItems;
+		end_times = blockSelectItems;
 	}
-
-	let chosen_start_time = { value: '0900', label: createBlockLabel('0900', false, false) };
-	let chosen_end_time = { value: '1700', label: createBlockLabel('1700', false, false) };
 
 	export let chosen_blocks: Array<string>;
 
-	$: {
-		chosen_blocks = createBlocks(increment, chosen_start_time.value, chosen_end_time.value);
+	let chosen_start_block_item: BlockSelectionItem;
+	let chosen_end_block_item: BlockSelectionItem;
+
+	export let chosen_start_block: string;
+	export let chosen_end_block: string;
+
+	function isEmpty(obj: Object) {
+		for (const prop in obj) {
+			if (Object.hasOwn(obj, prop)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	$: if (!isEmpty(chosen_start_block) && !isEmpty(chosen_end_block)) {
+		chosen_blocks = createBlocks(increment);
+		chosen_start_block = chosen_start_block_item.value;
+		chosen_end_block = chosen_end_block_item.value;
 	}
 </script>
 
@@ -122,7 +152,7 @@
 	</div>
 	<div class="p-4">
 		<h2>Start Time</h2>
-		<Select.Root bind:selected={chosen_start_time}>
+		<Select.Root bind:selected={chosen_start_block_item}>
 			<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
 				<Select.Value placeholder="Select a start time" />
 				<CaretUpDown class="size-6" />
@@ -142,7 +172,7 @@
 	</div>
 	<div class="p-4">
 		<h2>End Time</h2>
-		<Select.Root bind:selected={chosen_end_time}>
+		<Select.Root bind:selected={chosen_end_block_item}>
 			<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
 				<Select.Value placeholder="Select a start time" />
 				<CaretUpDown class="size-6" />

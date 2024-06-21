@@ -3,6 +3,8 @@
 	import BlockBuilder from '$lib/components/Block_Builder.svelte';
 
 	let blocks: Array<string>;
+	let start_block: string;
+	let end_block: string;
 
 	interface Slot {
 		name: string;
@@ -13,7 +15,7 @@
 </script>
 
 <section>
-	<BlockBuilder bind:chosen_blocks={blocks}></BlockBuilder>
+	<BlockBuilder bind:chosen_blocks={blocks} bind:chosen_start_block={start_block} bind:chosen_end_block={end_block}></BlockBuilder>
 	<SlotBuilder></SlotBuilder>
 	<!-- <TimeblockBuilder></TimeblockBuilder> -->
 </section>

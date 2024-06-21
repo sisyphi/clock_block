@@ -42,8 +42,6 @@
 		slots.splice(idx, 1);
 		slots = slots;
 	}
-
-	let default_slot_color: string;
 </script>
 
 <div>
@@ -51,10 +49,6 @@
 		<input bind:value={slot_name} type="text" placeholder="Enter slot name" />
 		<ColorPicker bind:hex={slot_color} />
 		<Button.Root on:click={addSlot}><span>Create slot</span></Button.Root>
-	</div>
-	<div style:background-color={default_slot_color} class="flex flex-row items-center gap-4 p-4">
-		<p>Default slot</p>
-		<ColorPicker bind:hex={default_slot_color} />
 	</div>
 	<div>
 		{#each slots as slot}

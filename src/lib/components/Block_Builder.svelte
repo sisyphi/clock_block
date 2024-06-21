@@ -3,9 +3,8 @@
 	import RadioUnchecked from '$lib/icons/Radio_Unchecked.svelte';
 	import CaretUpDown from '$lib/icons/Caret_Up_Down.svelte';
 	import Check from '$lib/icons/Check.svelte';
-	import { RadioGroup, Select, Label } from 'bits-ui';
+	import { RadioGroup, Select, Label, Button } from 'bits-ui';
 
-	let increment = '+0100';
 	let increments = [
 		{
 			id: 'plus-fifteen-min',
@@ -92,33 +91,20 @@
 		return block_label;
 	}
 
-	function createBlockSelectItems(increment: string, military_time: boolean, leading_zero: boolean) {
-		let blocks = createBlocks(increment);
+	function createBlockSelectItems(blocks: Array<string>, military_time: boolean, leading_zero: boolean) {
 		let blockSelectItems = [];
 
 		for (let idx = 0; idx < blocks.length; idx++) {
-			blockSelectItems.push({
-				value: blocks[idx],
-				label: createBlockLabel(blocks[idx], military_time, leading_zero)
-			});
+			if (blocks[idx].slice(2) == '00') {
+				blockSelectItems.push({
+					value: blocks[idx],
+					label: createBlockLabel(blocks[idx], military_time, leading_zero)
+				});
+			}
 		}
 
 		return blockSelectItems;
 	}
-
-	$: {
-		let blockSelectItems = createBlockSelectItems(increment, false, false);
-		start_times = blockSelectItems;
-		end_times = blockSelectItems;
-	}
-
-	export let chosen_blocks: Array<string>;
-
-	let chosen_start_block_item: BlockSelectionItem;
-	let chosen_end_block_item: BlockSelectionItem;
-
-	export let chosen_start_block: string;
-	export let chosen_end_block: string;
 
 	function isEmpty(obj: Object) {
 		for (const prop in obj) {
@@ -129,10 +115,37 @@
 		return true;
 	}
 
-	$: if (!isEmpty(chosen_start_block) && !isEmpty(chosen_end_block)) {
-		chosen_blocks = createBlocks(increment);
+	function handleSubmitBlocks() {
+		if (isEmpty(chosen_start_block_item) || isEmpty(chosen_end_block_item)) return;
+
+		chosen_increment = increment;
 		chosen_start_block = chosen_start_block_item.value;
 		chosen_end_block = chosen_end_block_item.value;
+
+		chosen_blocks = blocks;
+	}
+
+	export let increment = '+0100';
+
+	let blocks: Array<string> = createBlocks(increment);
+
+	export let chosen_blocks: Array<string>;
+
+	let chosen_start_block_item: BlockSelectionItem;
+	let chosen_end_block_item: BlockSelectionItem;
+
+	export let chosen_start_block: string;
+	export let chosen_end_block: string;
+
+	export let chosen_increment: string;
+
+	$: {
+		blocks = createBlocks(increment);
+
+		let blockSelectItems = createBlockSelectItems(blocks, false, false);
+
+		start_times = blockSelectItems;
+		end_times = blockSelectItems;
 	}
 </script>
 
@@ -189,5 +202,8 @@
 				{/each}
 			</Select.Content>
 		</Select.Root>
+	</div>
+	<div class="p-4">
+		<Button.Root on:click={handleSubmitBlocks}>Build</Button.Root>
 	</div>
 </div>

@@ -9,12 +9,22 @@
 		color: string;
 	}
 
-	let slots: Array<Slot> = [
-		{
-			name: 'Default',
-			color: '#ABABAB'
-		}
-	];
+	export let default_slot: Slot = {
+		name: 'Default',
+		color: '#ABABAB'
+	};
+
+	export let slots: Array<Slot> = [default_slot];
+
+	let active_slot_name: string = default_slot.name;
+
+	export let active_slot: Slot = default_slot;
+
+	$: {
+		active_slot = slots.filter(function (slot: Slot) {
+			return slot.name == active_slot_name;
+		})[0];
+	}
 
 	let slot_name: string;
 	let slot_color: string;
@@ -37,17 +47,7 @@
 	function deleteSlot(deleted_slot_name: string) {
 		let idx = slots.findIndex((s) => s.name === deleted_slot_name);
 		slots.splice(idx, 1);
-		slots = slots;
-	}
-
-	let active_slot_name: string = 'Default';
-
-	export let active_slot: Slot;
-
-	$: {
-		active_slot = slots.filter(function (slot: Slot) {
-			return slot.name == active_slot_name;
-		})[0];
+		slots = [...slots];
 	}
 </script>
 

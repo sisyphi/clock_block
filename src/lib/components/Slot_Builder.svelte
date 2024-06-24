@@ -15,21 +15,13 @@
 	};
 
 	export let slots: Array<Slot> = [default_slot];
-
-	let active_slot_name: string = default_slot.name;
+	let slot_name_input: string;
+	let slot_color_input: string;
 
 	export let active_slot: Slot = default_slot;
+	let active_slot_name: string = default_slot.name;
 
-	$: {
-		active_slot = slots.filter(function (slot: Slot) {
-			return slot.name == active_slot_name;
-		})[0];
-	}
-
-	let slot_name: string;
-	let slot_color: string;
-
-	function addSlot() {
+	function createSlot(slot_name: string, slot_color: string) {
 		let idx = slots.findIndex((s) => s.name === slot_name);
 
 		if (slot_name.length <= 0) return;
@@ -44,18 +36,27 @@
 		slots = [...slots, new_slot];
 	}
 
-	function deleteSlot(deleted_slot_name: string) {
-		let idx = slots.findIndex((s) => s.name === deleted_slot_name);
+	function deleteSlot(slot_name: string) {
+		let idx = slots.findIndex((s) => s.name === slot_name);
 		slots.splice(idx, 1);
 		slots = [...slots];
+	}
+
+	$: default_slot = slots[0];
+
+	// updates active_slot when a new slot is picked
+	$: {
+		active_slot = slots.filter(function (slot: Slot) {
+			return slot.name == active_slot_name;
+		})[0];
 	}
 </script>
 
 <div>
 	<div class="flex flex-row items-center gap-4 p-4">
-		<input bind:value={slot_name} type="text" placeholder="Enter slot name" />
-		<ColorPicker bind:hex={slot_color} />
-		<Button.Root on:click={addSlot}><span>Create slot</span></Button.Root>
+		<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" />
+		<ColorPicker bind:hex={slot_color_input} />
+		<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}><span>Create slot</span></Button.Root>
 	</div>
 	<div>
 		<RadioGroup.Root bind:value={active_slot_name}>

@@ -5,7 +5,7 @@
 	import Check from '$lib/icons/Check.svelte';
 	import { RadioGroup, Select, Label, Button } from 'bits-ui';
 
-	let increments = [
+	const INCREMENTS = [
 		{
 			id: 'plus-fifteen-min',
 			value: '+0015',
@@ -28,82 +28,90 @@
 		label: string;
 	}
 
-	let start_times: Array<BlockSelectionItem>;
-	let end_times: Array<BlockSelectionItem>;
+	let increment = '+0100';
+	export let submitted_increment: string;
 
-	function formatBlocks(blocks: Array<string>, start_time: string, end_time: string) {
-		// if starting and ending hour are not in the proper format, default to returning all blocks
-		if (start_time.length != 4 || end_time.length != 4) return blocks;
+	let blocks: Array<string> = createBlocks(increment);
+	export let submitted_blocks: Array<string>;
 
-		let start_hour = start_time.slice(0, 2);
-		let end_hour = end_time.slice(0, 2);
+	let start_block_select_items: Array<BlockSelectionItem>;
+	let end_block_select_items: Array<BlockSelectionItem>;
 
-		if (Number(start_hour) < 0 || Number(start_hour) >= 24) return blocks;
-		if (Number(end_hour) < 0 || Number(end_hour) >= 24) return blocks;
+	let start_block: BlockSelectionItem;
+	let end_block: BlockSelectionItem;
+	export let submitted_start_block: string;
+	export let submitted_end_block: string;
 
-		// format the blocks to the chosen start and end times
-		while (start_hour != blocks[0].slice(0, 2)) {
-			blocks.push(blocks.shift()!);
-		}
+	// function formatBlocks(blocks: Array<string>, start_time: string, end_time: string) {
+	// 	// if starting and ending hour are not in the proper format, default to returning all blocks
+	// 	if (start_time.length != 4 || end_time.length != 4) return blocks;
 
-		return blocks;
-	}
+	// 	let start_hour = start_time.slice(0, 2);
+	// 	let end_hour = end_time.slice(0, 2);
+
+	// 	if (Number(start_hour) < 0 || Number(start_hour) >= 24) return blocks;
+	// 	if (Number(end_hour) < 0 || Number(end_hour) >= 24) return blocks;
+
+	// 	// format the blocks to the submitted start and end times
+	// 	while (start_hour != blocks[0].slice(0, 2)) {
+	// 		blocks = [...blocks, blocks.shift()!];
+	// 	}
+
+	// 	return blocks;
+	// }
 
 	function createBlocks(increment: string) {
 		let blocks: Array<string> = [];
-		let minute_values: Array<string> = ['00', '15', '30', '45'];
+		const MINUTE_VALUES: Array<string> = ['00', '15', '30', '45'];
 
 		// creates the list of all blocks with the increment provided
 		for (let hour = 0; hour < 24; hour++) {
 			let hour_value = ('0' + hour).slice(-2);
 
-			let minute_increment = minute_values.length;
+			let minute_increment = MINUTE_VALUES.length;
 			if (increment == '+0100') minute_increment = 4;
 			else if (increment == '+0030') minute_increment = 2;
 			else if (increment == '+0015') minute_increment = 1;
 
-			for (let minute_idx = 0; minute_idx < minute_values.length; minute_idx += minute_increment) {
-				let minute_value = minute_values[minute_idx];
+			for (let minute_idx = 0; minute_idx < MINUTE_VALUES.length; minute_idx += minute_increment) {
+				let minute_value = MINUTE_VALUES[minute_idx];
 
-				blocks.push(hour_value.concat(minute_value));
+				blocks = [...blocks, hour_value.concat(minute_value)];
 			}
 		}
 
 		return blocks;
 	}
 
-	function createBlockLabel(block: string, military_time: boolean, leading_zero: boolean) {
-		let block_label: string;
-
+	function createBlockLabel(block: string, is_military_time: boolean, has_leading_zero: boolean) {
 		let hour = block.slice(0, 2);
 		let minute = block.slice(2);
 
-		if (!military_time) {
+		if (!is_military_time) {
 			minute = minute + (hour < '12' ? 'am' : 'pm');
 			hour = Number(hour) % 12 == 0 ? '12' : (Number(hour) % 12).toString();
 		}
 
-		if (leading_zero) hour = ('0' + hour).slice(-2);
+		if (has_leading_zero) hour = ('0' + hour).slice(-2);
 		else hour = Number(hour).toString();
 
-		block_label = hour + ':' + minute;
-
-		return block_label;
+		return hour + ':' + minute;
 	}
 
-	function createBlockSelectItems(blocks: Array<string>, military_time: boolean, leading_zero: boolean) {
-		let blockSelectItems = [];
+	function createBlockSelectItems(blocks: Array<string>, is_military_time: boolean, has_leading_zero: boolean) {
+		let block_select_items: Array<BlockSelectionItem> = [];
 
 		for (let idx = 0; idx < blocks.length; idx++) {
 			if (blocks[idx].slice(2) == '00') {
-				blockSelectItems.push({
+				let new_block_select_item = {
 					value: blocks[idx],
-					label: createBlockLabel(blocks[idx], military_time, leading_zero)
-				});
+					label: createBlockLabel(blocks[idx], is_military_time, has_leading_zero)
+				};
+				block_select_items = [...block_select_items, new_block_select_item];
 			}
 		}
 
-		return blockSelectItems;
+		return block_select_items;
 	}
 
 	function isEmpty(obj: Object) {
@@ -116,94 +124,86 @@
 	}
 
 	function handleSubmitBlocks() {
-		if (isEmpty(chosen_start_block_item) || isEmpty(chosen_end_block_item)) return;
+		if (isEmpty(start_block) || isEmpty(end_block)) return;
 
-		chosen_increment = increment;
-		chosen_start_block = chosen_start_block_item.value;
-		chosen_end_block = chosen_end_block_item.value;
+		submitted_increment = increment;
+		submitted_start_block = start_block.value;
+		submitted_end_block = end_block.value;
 
-		chosen_blocks = blocks;
+		submitted_blocks = blocks;
 	}
-
-	export let increment = '+0100';
-
-	let blocks: Array<string> = createBlocks(increment);
-
-	export let chosen_blocks: Array<string>;
-
-	let chosen_start_block_item: BlockSelectionItem;
-	let chosen_end_block_item: BlockSelectionItem;
-
-	export let chosen_start_block: string;
-	export let chosen_end_block: string;
-
-	export let chosen_increment: string;
 
 	$: {
 		blocks = createBlocks(increment);
 
-		let blockSelectItems = createBlockSelectItems(blocks, false, false);
+		let block_select_items = createBlockSelectItems(blocks, false, false);
 
-		start_times = blockSelectItems;
-		end_times = blockSelectItems;
+		start_block_select_items = block_select_items;
+		end_block_select_items = block_select_items;
 	}
 </script>
 
-<div>
-	<div class="p-4">
-		<h2>Block Increments</h2>
-		<RadioGroup.Root bind:value={increment}>
-			{#each increments as increment}
-				<RadioGroup.Item id={increment.id} value={increment.value} class="flex flex-row items-center [&[data-state=checked]>svg]:hidden">
-					<!-- <RadioUnchecked class="text-[{'#0022ffa6'}]" /> -->
-					<RadioUnchecked />
-					<RadioGroup.ItemIndicator><RadioChecked /></RadioGroup.ItemIndicator>
-					<Label.Root for={increment.id}>{increment.label}</Label.Root>
-				</RadioGroup.Item>
-			{/each}
-		</RadioGroup.Root>
-	</div>
-	<div class="p-4">
-		<h2>Start Time</h2>
-		<Select.Root bind:selected={chosen_start_block_item}>
-			<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
-				<Select.Value placeholder="Select a start time" />
-				<CaretUpDown class="size-6" />
-			</Select.Trigger>
-
-			<Select.Content class="p-2 my-2 overflow-scroll bg-white border outline-none max-h-64">
-				{#each start_times as start_time}
-					<Select.Item value={start_time.value} label={start_time.label} class="flex flex-row items-center justify-between p-2">
-						<Label.Root for={start_time.value}>{start_time.label}</Label.Root>
-						<Select.ItemIndicator>
-							<Check class="size-6" />
-						</Select.ItemIndicator>
-					</Select.Item>
+<section class="px-6 py-2 md:px-8">
+	<div class="md:flex md:flex-row md:justify-between md:max-w-6xl md:py-4 md:mx-auto">
+		<div class="">
+			<h2>Block Increments</h2>
+			<RadioGroup.Root bind:value={increment} class="md:flex md:flex-row md:gap-2">
+				{#each INCREMENTS as increment}
+					<RadioGroup.Item id={increment.id} value={increment.value} class="md:flex md:flex-row md:items-center [&[data-state=checked]>svg]:hidden">
+						<!-- <RadioUnchecked class="text-[{'#0022ffa6'}]" /> -->
+						<RadioUnchecked />
+						<RadioGroup.ItemIndicator><RadioChecked /></RadioGroup.ItemIndicator>
+						<Label.Root for={increment.id}>{increment.label}</Label.Root>
+					</RadioGroup.Item>
 				{/each}
-			</Select.Content>
-		</Select.Root>
-	</div>
-	<div class="p-4">
-		<h2>End Time</h2>
-		<Select.Root bind:selected={chosen_end_block_item}>
-			<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
-				<Select.Value placeholder="Select a start time" />
-				<CaretUpDown class="size-6" />
-			</Select.Trigger>
+			</RadioGroup.Root>
+		</div>
+		<div class="md:flex md:flex-row md:items-center md:gap-4">
+			<div>
+				<h2>Start Time</h2>
+				<Select.Root bind:selected={start_block}>
+					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
+						<Select.Value placeholder="Select a start time" />
+						<CaretUpDown class="size-6" />
+					</Select.Trigger>
 
-			<Select.Content class="p-2 my-2 overflow-scroll bg-white border outline-none max-h-64">
-				{#each end_times as end_time}
-					<Select.Item value={end_time.value} label={end_time.label} class="flex flex-row items-center justify-between p-2">
-						<Label.Root for={end_time.value}>{end_time.label}</Label.Root>
-						<Select.ItemIndicator>
-							<Check class="size-6" />
-						</Select.ItemIndicator>
-					</Select.Item>
-				{/each}
-			</Select.Content>
-		</Select.Root>
+					<Select.Content class="p-2 my-2 overflow-scroll bg-white border outline-none max-h-64">
+						{#each start_block_select_items as start_time}
+							<Select.Item value={start_time.value} label={start_time.label} class="flex flex-row items-center justify-between p-2">
+								<Label.Root for={start_time.value}>{start_time.label}</Label.Root>
+								<Select.ItemIndicator>
+									<Check class="size-6" />
+								</Select.ItemIndicator>
+							</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+			</div>
+		</div>
+		<div class="md:flex md:flex-row md:items-center md:gap-4">
+			<div>
+				<h2>End Time</h2>
+				<Select.Root bind:selected={end_block}>
+					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
+						<Select.Value placeholder="Select a start time" />
+						<CaretUpDown class="size-6" />
+					</Select.Trigger>
+
+					<Select.Content class="p-2 my-2 overflow-scroll bg-white border outline-none max-h-64">
+						{#each end_block_select_items as end_time}
+							<Select.Item value={end_time.value} label={end_time.label} class="flex flex-row items-center justify-between p-2">
+								<Label.Root for={end_time.value}>{end_time.label}</Label.Root>
+								<Select.ItemIndicator>
+									<Check class="size-6" />
+								</Select.ItemIndicator>
+							</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+			</div>
+		</div>
 	</div>
-	<div class="p-4">
-		<Button.Root on:click={handleSubmitBlocks}>Build</Button.Root>
+	<div class="flex flex-row justify-center w-full mx-auto">
+		<Button.Root on:click={handleSubmitBlocks} class="px-12 py-2">Build</Button.Root>
 	</div>
-</div>
+</section>

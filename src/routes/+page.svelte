@@ -5,19 +5,19 @@
 
 	function createBlocks(increment: string) {
 		let blocks: Array<string> = [];
-		let minute_values: Array<string> = ['00', '15', '30', '45'];
+		const MINUTE_VALUES: Array<string> = ['00', '15', '30', '45'];
 
 		// creates the list of all blocks with the increment provided
 		for (let hour = 0; hour < 24; hour++) {
 			let hour_value = ('0' + hour).slice(-2);
 
-			let minute_increment = minute_values.length;
+			let minute_increment = MINUTE_VALUES.length;
 			if (increment == '+0100') minute_increment = 4;
 			else if (increment == '+0030') minute_increment = 2;
 			else if (increment == '+0015') minute_increment = 1;
 
-			for (let minute_idx = 0; minute_idx < minute_values.length; minute_idx += minute_increment) {
-				let minute_value = minute_values[minute_idx];
+			for (let minute_idx = 0; minute_idx < MINUTE_VALUES.length; minute_idx += minute_increment) {
+				let minute_value = MINUTE_VALUES[minute_idx];
 
 				blocks.push(hour_value.concat(minute_value));
 			}
@@ -99,7 +99,7 @@
 </script>
 
 <section>
-	<BlockBuilder bind:chosen_blocks={blocks} bind:chosen_increment={increment} bind:chosen_start_block={start_block} bind:chosen_end_block={end_block}></BlockBuilder>
+	<BlockBuilder bind:submitted_blocks={blocks} bind:submitted_increment={increment} bind:submitted_start_block={start_block} bind:submitted_end_block={end_block}></BlockBuilder>
 	<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 
 	<div class="p-4">

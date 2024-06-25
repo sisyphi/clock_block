@@ -143,13 +143,12 @@
 	}
 </script>
 
-<section class="px-6 py-2 md:px-8">
-	<div class="md:flex md:flex-row md:justify-between md:max-w-6xl md:py-4 md:mx-auto">
+<section class="px-6 py-4 md:px-8">
+	<div class="flex flex-col justify-between gap-2 mx-auto md:flex-row md:max-w-3xl">
 		<div class="">
-			<h2>Block Increments</h2>
-			<RadioGroup.Root bind:value={increment} class="md:flex md:flex-row md:gap-2">
+			<RadioGroup.Root bind:value={increment} class="flex flex-row justify-center gap-2 px-2 py-1 mx-auto text-white rounded-sm w-fit bg-neutral-800">
 				{#each INCREMENTS as increment}
-					<RadioGroup.Item id={increment.id} value={increment.value} class="md:flex md:flex-row md:items-center [&[data-state=checked]>svg]:hidden">
+					<RadioGroup.Item id={increment.id} value={increment.value} class="flex flex-row items-center [&[data-state=checked]>svg]:hidden">
 						<!-- <RadioUnchecked class="text-[{'#0022ffa6'}]" /> -->
 						<RadioUnchecked />
 						<RadioGroup.ItemIndicator><RadioChecked /></RadioGroup.ItemIndicator>
@@ -158,11 +157,10 @@
 				{/each}
 			</RadioGroup.Root>
 		</div>
-		<div class="md:flex md:flex-row md:items-center md:gap-4">
-			<div>
-				<h2>Start Time</h2>
+		<div class="flex flex-row justify-center gap-2 mx-auto">
+			<div class="">
 				<Select.Root bind:selected={start_block}>
-					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
+					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800">
 						<Select.Value placeholder="Select a start time" />
 						<CaretUpDown class="size-6" />
 					</Select.Trigger>
@@ -179,13 +177,10 @@
 					</Select.Content>
 				</Select.Root>
 			</div>
-		</div>
-		<div class="md:flex md:flex-row md:items-center md:gap-4">
-			<div>
-				<h2>End Time</h2>
+			<div class="">
 				<Select.Root bind:selected={end_block}>
-					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 min-w-32">
-						<Select.Value placeholder="Select a start time" />
+					<Select.Trigger aria-label="Select an end time" class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800">
+						<Select.Value placeholder="Select an end time" />
 						<CaretUpDown class="size-6" />
 					</Select.Trigger>
 
@@ -202,8 +197,8 @@
 				</Select.Root>
 			</div>
 		</div>
-	</div>
-	<div class="flex flex-row justify-center w-full mx-auto">
-		<Button.Root on:click={handleSubmitBlocks} class="px-12 py-2">Build</Button.Root>
+		<div class="flex flex-row items-end justify-center text-white">
+			<Button.Root on:click={handleSubmitBlocks} class="px-4 py-1 rounded-sm bg-neutral-800">Build</Button.Root>
+		</div>
 	</div>
 </section>

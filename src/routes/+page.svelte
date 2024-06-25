@@ -100,20 +100,27 @@
 
 <section>
 	<BlockBuilder bind:submitted_blocks={blocks} bind:submitted_increment={increment} bind:submitted_start_block={start_block} bind:submitted_end_block={end_block}></BlockBuilder>
-	<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
-
-	<div class="p-4">
-		{#each timeblocks as timeblock}
-			{#if timeblock.active_on_timetable}
-				<div style:background-color={timeblock.slot != undefined ? timeblock.slot.color : '#2B2B2B'}>
-					<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row gap-2 py-2 hover:bg-neutral-300">
-						<p>{timeblock.block}</p>
-						{#if timeblock.slot != undefined}
-							<p>{timeblock.slot.name}</p>
+	<div class="px-6 py-4 md:px-8">
+		<div class="mx-auto md:grid md:grid-cols-2 md:grid-rows-1 md:max-w-6xl">
+			<div class="md:col-span-1 md:row-span-1">
+				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
+			</div>
+			<div class="md:col-span-1 md:row-span-1">
+				<div class="p-4">
+					{#each timeblocks as timeblock}
+						{#if timeblock.active_on_timetable}
+							<div style:background-color={timeblock.slot != undefined ? timeblock.slot.color : '#2B2B2B'}>
+								<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row gap-2 py-2 hover:bg-neutral-300">
+									<p>{timeblock.block}</p>
+									{#if timeblock.slot != undefined}
+										<p>{timeblock.slot.name}</p>
+									{/if}
+								</Button.Root>
+							</div>
 						{/if}
-					</Button.Root>
+					{/each}
 				</div>
-			{/if}
-		{/each}
+			</div>
+		</div>
 	</div>
 </section>

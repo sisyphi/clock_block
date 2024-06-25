@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ColorPicker from 'svelte-awesome-color-picker';
+	import ColorPickerInput from './ColorPickerInput.svelte';
 	import Check from '$lib/icons/Check.svelte';
 
 	import { Label, RadioGroup, Button } from 'bits-ui';
@@ -52,10 +53,10 @@
 	}
 </script>
 
-<div>
+<section>
 	<div class="flex flex-row items-center gap-4 p-4">
 		<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" />
-		<ColorPicker bind:hex={slot_color_input} />
+		<ColorPicker label="" bind:hex={slot_color_input} components={{ input: ColorPickerInput }} />
 		<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}><span>Create slot</span></Button.Root>
 	</div>
 	<div>
@@ -75,4 +76,4 @@
 			{/each}
 		</RadioGroup.Root>
 	</div>
-</div>
+</section>

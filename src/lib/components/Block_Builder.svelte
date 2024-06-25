@@ -9,17 +9,17 @@
 		{
 			id: 'plus-fifteen-min',
 			value: '+0015',
-			label: '+00:15'
+			label: '15m'
 		},
 		{
 			id: 'plus-thirty-min',
 			value: '+0030',
-			label: '+00:30'
+			label: '30m'
 		},
 		{
 			id: 'plus-one-hr',
 			value: '+0100',
-			label: '+01:00'
+			label: '1hr'
 		}
 	];
 
@@ -145,19 +145,7 @@
 
 <section class="px-6 py-4 md:px-8">
 	<div class="flex flex-col justify-between gap-2 mx-auto md:flex-row md:max-w-3xl">
-		<div class="">
-			<RadioGroup.Root bind:value={increment} class="flex flex-row justify-center gap-2 px-2 py-1 mx-auto text-white rounded-sm w-fit bg-neutral-800">
-				{#each INCREMENTS as increment}
-					<RadioGroup.Item id={increment.id} value={increment.value} class="flex flex-row items-center [&[data-state=checked]>svg]:hidden">
-						<!-- <RadioUnchecked class="text-[{'#0022ffa6'}]" /> -->
-						<RadioUnchecked />
-						<RadioGroup.ItemIndicator><RadioChecked /></RadioGroup.ItemIndicator>
-						<Label.Root for={increment.id}>{increment.label}</Label.Root>
-					</RadioGroup.Item>
-				{/each}
-			</RadioGroup.Root>
-		</div>
-		<div class="flex flex-row justify-center gap-2 mx-auto">
+		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto">
 			<div class="">
 				<Select.Root bind:selected={start_block}>
 					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800">
@@ -197,8 +185,21 @@
 				</Select.Root>
 			</div>
 		</div>
-		<div class="flex flex-row items-end justify-center text-white">
-			<Button.Root on:click={handleSubmitBlocks} class="px-4 py-1 rounded-sm bg-neutral-800">Build</Button.Root>
+		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto">
+			<div class="">
+				<RadioGroup.Root bind:value={increment} class="flex flex-row justify-center gap-2 px-2 py-1 mx-auto text-white rounded-sm w-fit bg-neutral-800">
+					{#each INCREMENTS as increment}
+						<RadioGroup.Item id={increment.id} value={increment.value} class="flex flex-row items-center [&[data-state=checked]>svg]:hidden">
+							<RadioUnchecked />
+							<RadioGroup.ItemIndicator><RadioChecked /></RadioGroup.ItemIndicator>
+							<Label.Root for={increment.id}>{increment.label}</Label.Root>
+						</RadioGroup.Item>
+					{/each}
+				</RadioGroup.Root>
+			</div>
+			<div class="flex flex-row items-end justify-center text-white">
+				<Button.Root on:click={handleSubmitBlocks} class="px-4 py-1 rounded-sm bg-neutral-800">Build</Button.Root>
+			</div>
 		</div>
 	</div>
 </section>

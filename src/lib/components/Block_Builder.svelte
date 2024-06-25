@@ -144,8 +144,8 @@
 </script>
 
 <section class="px-6 py-4 md:px-8">
-	<div class="flex flex-col justify-between gap-2 mx-auto md:flex-row md:max-w-3xl">
-		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto">
+	<div class="flex flex-col justify-center gap-2 mx-auto md:flex-row md:max-w-3xl">
+		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
 			<div class="">
 				<Select.Root bind:selected={start_block}>
 					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800">
@@ -185,7 +185,7 @@
 				</Select.Root>
 			</div>
 		</div>
-		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto">
+		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
 			<div class="">
 				<RadioGroup.Root bind:value={increment} class="flex flex-row justify-center gap-2 px-2 py-1 mx-auto text-white rounded-sm w-fit bg-neutral-800">
 					{#each INCREMENTS as increment}

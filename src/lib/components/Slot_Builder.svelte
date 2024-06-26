@@ -71,7 +71,7 @@
 			{#each slots as slot, idx}
 				<div class="flex flex-row gap-4">
 					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
-						<div style:background-color={slot.color} class="flex flex-row w-full gap-1 px-1 py-1 overflow-scroll border-2 rounded-sm border-neutral-800">
+						<div style:background-color={slot.color} class="flex flex-row items-center w-full gap-1 px-1 py-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800">
 							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
 							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="cursor-pointer">{slot.name}</Label.Root>
 						</div>

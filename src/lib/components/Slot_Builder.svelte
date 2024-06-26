@@ -4,6 +4,8 @@
 	import Check from '$lib/icons/Check.svelte';
 
 	import { Label, RadioGroup, Button } from 'bits-ui';
+	import PlusCircle from '$lib/icons/Plus_Circle.svelte';
+	import Trash from '$lib/icons/Trash.svelte';
 
 	interface Slot {
 		name: string;
@@ -54,24 +56,33 @@
 </script>
 
 <section>
-	<div class="flex flex-row items-center gap-4 p-4">
-		<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" />
-		<ColorPicker label="" bind:hex={slot_color_input} components={{ input: ColorPickerInput }} />
-		<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}><span>Create slot</span></Button.Root>
+	<div class="flex flex-row items-center justify-between gap-4 mx-auto">
+		<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" class="flex-grow px-2 py-1 my-2 border-2 rounded-sm min-w-36 border-neutral-800" />
+		<div class="flex flex-row items-center gap-4">
+			<ColorPicker label="" bind:hex={slot_color_input} components={{ input: ColorPickerInput }} />
+			<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}>
+				<span class="sr-only">Create slot</span>
+				<PlusCircle class="size-8"></PlusCircle>
+			</Button.Root>
+		</div>
 	</div>
 	<div>
-		<RadioGroup.Root bind:value={active_slot_name}>
+		<RadioGroup.Root bind:value={active_slot_name} class="flex flex-col gap-2">
 			{#each slots as slot, idx}
-				<div style:background-color={slot.color}>
-					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex flex-row items-center gap-4 p-4 hover:border-4 [&[data-state=checked]>svg]:hidden">
-						<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')}>{slot.name}</Label.Root>
-						<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
-
-						<ColorPicker bind:hex={slot.color} />
-						{#if idx != 0}
-							<Button.Root on:click={() => deleteSlot(slot.name)}><span>Delete slot</span></Button.Root>
-						{/if}
+				<div class="flex flex-row items-center justify-between w-full gap-4 mx-auto">
+					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex-grow [&[data-state=checked]>svg]:hidden">
+						<div style:background-color={slot.color} class="flex flex-row justify-between px-2 py-1 border-2 rounded-sm min-w-36 border-neutral-800">
+							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')}>{slot.name}</Label.Root>
+							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
+						</div>
 					</RadioGroup.Item>
+					<div class="flex flex-row items-center justify-center gap-4">
+						<ColorPicker label="" bind:hex={slot.color} components={{ input: ColorPickerInput }} />
+						<Button.Root on:click={() => deleteSlot(slot.name)} disabled={idx == 0} class={idx == 0 ? 'opacity-0' : ''}>
+							<span class="sr-only">Delete slot</span>
+							<Trash class="size-8"></Trash>
+						</Button.Root>
+					</div>
 				</div>
 			{/each}
 		</RadioGroup.Root>

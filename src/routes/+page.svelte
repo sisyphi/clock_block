@@ -100,8 +100,8 @@
 
 <section>
 	<BlockBuilder bind:submitted_blocks={blocks} bind:submitted_increment={increment} bind:submitted_start_block={start_block} bind:submitted_end_block={end_block}></BlockBuilder>
-	<div class="px-6 py-4 md:px-8">
-		<div class="mx-auto md:grid md:grid-cols-2 md:grid-rows-1 md:max-w-6xl">
+	<div class="px-6 md:px-8">
+		<div class="max-w-md mx-auto md:grid md:grid-cols-2 md:grid-rows-1 md:max-w-4xl">
 			<div class="md:col-span-1 md:row-span-1">
 				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 			</div>

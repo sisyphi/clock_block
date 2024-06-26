@@ -22,9 +22,9 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-click-events-have-key-events -->
-<label bind:this={labelElement} on:click|preventDefault={noop} on:mousedown|preventDefault={noop} class="flex cursor-pointer size-7">
+<label bind:this={labelElement} on:click|preventDefault={noop} on:mousedown|preventDefault={noop} class="flex cursor-pointer size-5">
 	<div class="flex items-center">
 		<input type="color" {name} value={hex} on:click|preventDefault={noop} on:mousedown|preventDefault={noop} aria-haspopup="dialog" class="opacity-0 size-0" />
-		<Palette class="absolute select-none size-7"></Palette>
+		<Palette class="absolute select-none size-5"></Palette>
 	</div>
 </label>

@@ -50,7 +50,13 @@
 		color: '#ABABAB'
 	};
 
-	let slots: Array<Slot> = [default_slot];
+	let slots: Array<Slot> = [
+		default_slot,
+		{ name: 'Lunch', color: '#ffd000' },
+		{ name: 'Dinner', color: '#ffd000' },
+		{ name: 'Break', color: '#009dff' },
+		{ name: 'Study', color: '#ff0000' }
+	];
 
 	interface Timeblock {
 		active_on_timetable: boolean;
@@ -99,27 +105,26 @@
 </script>
 
 <section>
-	<BlockBuilder bind:submitted_blocks={blocks} bind:submitted_increment={increment} bind:submitted_start_block={start_block} bind:submitted_end_block={end_block}></BlockBuilder>
+	<BlockBuilder bind:submitted_blocks={blocks} bind:submitted_increment={increment} bind:submitted_start_block={start_block} bind:submitted_end_block={end_block}
+	></BlockBuilder>
 	<div class="px-6 md:px-8">
-		<div class="max-w-md mx-auto md:grid md:grid-cols-2 md:grid-rows-1 md:max-w-4xl">
+		<div class="justify-between max-w-md mx-auto md:grid md:grid-cols-2 md:grid-rows-1 md:max-w-4xl md:gap-8">
 			<div class="md:col-span-1 md:row-span-1">
 				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 			</div>
-			<div class="md:col-span-1 md:row-span-1">
-				<div class="p-4">
-					{#each timeblocks as timeblock}
-						{#if timeblock.active_on_timetable}
-							<!-- <div style:background-color={timeblock.slot != undefined ? timeblock.slot.color : '#2B2B2B'}>
-								<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row gap-2 py-2 hover:bg-neutral-300">
-									<p>{timeblock.block}</p>
-									{#if timeblock.slot != undefined}
-										<p>{timeblock.slot.name}</p>
-									{/if}
-								</Button.Root>
-							</div> -->
-						{/if}
-					{/each}
-				</div>
+			<div class="border-2 md:col-span-1 md:row-span-1 border-neutral-800">
+				{#each timeblocks as timeblock}
+					{#if timeblock.active_on_timetable}
+						<div style:background-color={timeblock.slot != undefined ? timeblock.slot.color : slots[0].color}>
+							<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row gap-2 py-2 hover:bg-neutral-300">
+								<p>{timeblock.block}</p>
+								{#if timeblock.slot != undefined}
+									<p>{timeblock.slot.name}</p>
+								{/if}
+							</Button.Root>
+						</div>
+					{/if}
+				{/each}
 			</div>
 		</div>
 	</div>

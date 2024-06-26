@@ -17,7 +17,13 @@
 		color: '#ABABAB'
 	};
 
-	export let slots: Array<Slot> = [default_slot];
+	export let slots: Array<Slot> = [
+		default_slot,
+		{ name: 'Lunch', color: '#ffd000' },
+		{ name: 'Dinner', color: '#ffd000' },
+		{ name: 'Break', color: '#009dff' },
+		{ name: 'Study', color: '#ff0000' }
+	];
 	let slot_name_input: string;
 	let slot_color_input: string;
 
@@ -56,13 +62,13 @@
 </script>
 
 <section>
-	<div class="flex flex-row items-center justify-between gap-4 mx-auto">
-		<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" class="flex-grow px-2 py-1 my-2 border-2 rounded-sm min-w-36 border-neutral-800" />
+	<div class="flex flex-row items-center justify-between gap-4 mx-auto mb-2">
+		<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" class="flex-grow px-2 py-1 border-2 rounded-sm min-w-36 border-neutral-800" />
 		<div class="flex flex-row items-center gap-4">
 			<ColorPicker label="" bind:hex={slot_color_input} components={{ input: ColorPickerInput }} />
 			<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}>
 				<span class="sr-only">Create slot</span>
-				<PlusCircle class="size-8"></PlusCircle>
+				<PlusCircle class="size-6"></PlusCircle>
 			</Button.Root>
 		</div>
 	</div>
@@ -71,7 +77,10 @@
 			{#each slots as slot, idx}
 				<div class="flex flex-row gap-4">
 					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
-						<div style:background-color={slot.color} class="flex flex-row items-center w-full gap-1 px-1 py-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800">
+						<div
+							style:background-color={slot.color}
+							class="flex flex-row items-center w-full gap-1 px-1 py-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800"
+						>
 							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
 							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="cursor-pointer">{slot.name}</Label.Root>
 						</div>
@@ -80,7 +89,7 @@
 						<ColorPicker label="" bind:hex={slot.color} components={{ input: ColorPickerInput }} />
 						<Button.Root on:click={() => deleteSlot(slot.name)} disabled={idx == 0} class={idx == 0 ? 'opacity-0' : ''}>
 							<span class="sr-only">Delete slot</span>
-							<Trash class="size-8"></Trash>
+							<Trash class="size-6"></Trash>
 						</Button.Root>
 					</div>
 

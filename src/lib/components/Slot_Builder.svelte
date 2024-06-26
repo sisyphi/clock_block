@@ -69,11 +69,11 @@
 	<div>
 		<RadioGroup.Root bind:value={active_slot_name} class="flex flex-col gap-2">
 			{#each slots as slot, idx}
-				<div class="flex flex-row items-center justify-between w-full gap-4 mx-auto">
-					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex-grow [&[data-state=checked]>svg]:hidden">
-						<div style:background-color={slot.color} class="flex flex-row justify-between px-2 py-1 border-2 rounded-sm min-w-36 border-neutral-800">
-							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')}>{slot.name}</Label.Root>
+				<div class="flex flex-row gap-4">
+					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
+						<div style:background-color={slot.color} class="flex flex-row w-full gap-1 px-1 py-1 overflow-scroll border-2 rounded-sm border-neutral-800">
 							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
+							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="cursor-pointer">{slot.name}</Label.Root>
 						</div>
 					</RadioGroup.Item>
 					<div class="flex flex-row items-center justify-center gap-4">
@@ -83,6 +83,20 @@
 							<Trash class="size-8"></Trash>
 						</Button.Root>
 					</div>
+
+					<!-- <RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="w-full">
+						<div style:background-color={slot.color} class="flex flex-row flex-grow min-w-0 gap-1 px-1 py-1 overflow-scroll border-2 rounded-sm text-ellipsis border-neutral-800">
+							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
+							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="cursor-pointer">{slot.name}</Label.Root>
+						</div>
+					</RadioGroup.Item>
+					<div class="flex flex-row items-center justify-center gap-4">
+						<ColorPicker label="" bind:hex={slot.color} components={{ input: ColorPickerInput }} />
+						<Button.Root on:click={() => deleteSlot(slot.name)} disabled={idx == 0} class={idx == 0 ? 'opacity-0' : ''}>
+							<span class="sr-only">Delete slot</span>
+							<Trash class="size-8"></Trash>
+						</Button.Root>
+					</div> -->
 				</div>
 			{/each}
 		</RadioGroup.Root>

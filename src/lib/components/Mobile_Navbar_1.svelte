@@ -20,13 +20,13 @@
 <!-- Close Menu on Keydown Escape -->
 <svelte:window use:closeOnEscape on:escape={closeMenu} />
 
-<div class="absolute inset-0 w-full h-screen backdrop-blur-sm bg-neutral-800/80"></div>
+<div class="absolute inset-0 z-50 w-full h-screen backdrop-blur-sm bg-neutral-800/80"></div>
 
 <!-- 
 	use:trapFocus - Trap Focus within Menu
 	use:closeOnClickOutside & on:outclick - Close Menu on Outside Click
 -->
-<div use:trapFocus use:closeOnClickOutside on:outclick={closeMenu} class="absolute inset-0 h-screen px-6 py-2 overflow-scroll shadow-lg w-72 bg-neutral-800 md:px-8 md:py-4">
+<div use:trapFocus use:closeOnClickOutside on:outclick={closeMenu} class="absolute inset-0 z-50 h-screen px-6 py-2 overflow-scroll shadow-lg w-72 bg-neutral-800 md:px-8 md:py-4">
 	<div class="flex justify-between w-auto">
 		<a href="/" class="self-center">
 			<span class="sr-only">Brand Name</span>

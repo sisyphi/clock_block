@@ -119,7 +119,7 @@
 							<p class="text-xs text-right text-neutral-600 min-w-20">{timeblock.block}</p>
 							<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row justify-between w-full">
 								<div style:background-color={timeblock.slot.color} class="w-full p-1 border-2 rounded-sm bg-neutral-300 border-neutral-800">
-									<p class="{timeblock.slot.name == 'Default' ? 'opacity-0 cursor-default' : ''} text-center">{timeblock.slot.name}</p>
+									<p class="{timeblock.slot.name == 'Default' ? 'opacity-0 cursor-default select-none' : ''} text-center">{timeblock.slot.name}</p>
 								</div>
 							</Button.Root>
 						</div>

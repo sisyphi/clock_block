@@ -1,11 +1,15 @@
 <script lang="ts">
-	import ColorPicker from 'svelte-awesome-color-picker';
+	import ColorPicker, { ChromeVariant } from 'svelte-awesome-color-picker';
 	import ColorPickerInput from './ColorPickerInput.svelte';
 	import Check from '$lib/icons/Check.svelte';
 
-	import { Label, RadioGroup, Button } from 'bits-ui';
+	import { Label, RadioGroup, Button, type CustomEventHandler } from 'bits-ui';
 	import PlusCircle from '$lib/icons/Plus_Circle.svelte';
+	import CircleCross from '$lib/icons/Circle_Cross.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
+	import RadioChecked from '$lib/icons/Radio_Checked.svelte';
+	import RadioUnchecked from '$lib/icons/Radio_Unchecked.svelte';
+	import ColorPickerWrapper from './ColorPickerWrapper.svelte';
 
 	interface Slot {
 		name: string;
@@ -48,9 +52,18 @@
 	function deleteSlot(slot_name: string) {
 		let idx = slots.findIndex((s) => s.name === slot_name);
 		slots.splice(idx, 1);
-		slots = [...slots];
-
 		active_slot_name = default_slot.name;
+
+		slots = [...slots];
+	}
+
+	function deleteSlotOnBackspace(e: CustomEventHandler<KeyboardEvent, HTMLButtonElement>, slot_name: string) {
+		if (e.detail.originalEvent.key != 'Backspace') return;
+		let idx = slots.findIndex((s) => s.name === slot_name);
+		slots.splice(idx, 1);
+		active_slot_name = default_slot.name;
+
+		slots = [...slots];
 	}
 
 	$: default_slot = slots[0];
@@ -61,34 +74,61 @@
 			return slot.name == active_slot_name;
 		})[0];
 	}
+
+	function resetForm() {
+		slot_name_input = '';
+	}
 </script>
 
 <section>
-	<div class="flex flex-row items-center justify-between gap-4 mx-auto mb-2">
-		<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" class="flex-grow px-2 py-1 border-2 rounded-sm min-w-36 border-neutral-800" />
-		<div class="flex flex-row items-center gap-4">
-			<ColorPicker label="" bind:hex={slot_color_input} components={{ input: ColorPickerInput }} />
-			<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}>
-				<span class="sr-only">Create slot</span>
-				<PlusCircle class="size-6"></PlusCircle>
-			</Button.Root>
+	<form on:submit|preventDefault={resetForm}>
+		<div class="flex flex-row items-center justify-between gap-4 mx-auto mb-2">
+			<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" class="flex-grow px-2 py-1 border-2 rounded-sm min-w-36 border-neutral-800" />
+			<div class="flex flex-row items-center gap-4">
+				<ColorPicker
+					label=""
+					bind:hex={slot_color_input}
+					sliderDirection="horizontal"
+					isDark={true}
+					isAlpha={false}
+					components={{ ...ChromeVariant, input: ColorPickerInput, wrapper: ColorPickerWrapper }}
+				/>
+				<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}>
+					<span class="sr-only">Create slot</span>
+					<PlusCircle class="size-6"></PlusCircle>
+				</Button.Root>
+			</div>
 		</div>
-	</div>
+	</form>
 	<div>
 		<RadioGroup.Root bind:value={active_slot_name} class="flex flex-col gap-2">
 			{#each slots as slot, idx}
 				<div class="flex flex-row gap-4">
-					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
+					<RadioGroup.Item
+						id={slot.name.toLowerCase().replaceAll(' ', '-')}
+						value={slot.name}
+						on:keydown={(event) => deleteSlotOnBackspace(event, slot.name)}
+						class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36 [&[data-state=checked]>div>svg]:hidden [&[data-state=unchecked]>div>div>svg]:hidden"
+					>
 						<div
 							style:background-color={slot.color}
-							class="flex flex-row items-center w-full gap-1 p-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800"
+							class="flex flex-row items-center w-full p-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800"
 						>
-							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
-							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="cursor-pointer">{slot.name}</Label.Root>
+							<RadioUnchecked class="size-6" />
+							<div><RadioChecked class="size-6" /></div>
+							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="mx-1 cursor-pointer">{slot.name}</Label.Root>
 						</div>
 					</RadioGroup.Item>
 					<div class="flex flex-row items-center justify-center gap-4">
-						<ColorPicker label="" bind:hex={slot.color} components={{ input: ColorPickerInput }} />
+						<ColorPicker
+							label=""
+							bind:hex={slot.color}
+							sliderDirection="horizontal"
+							isAlpha={false}
+							isTextInput={false}
+							components={{ ...ChromeVariant, input: ColorPickerInput }}
+							--focus-color="grey"
+						/>
 						<Button.Root on:click={() => deleteSlot(slot.name)} disabled={idx == 0} class={idx == 0 ? 'opacity-0' : ''}>
 							<span class="sr-only">Delete slot</span>
 							<Trash class="size-6"></Trash>

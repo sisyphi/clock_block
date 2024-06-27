@@ -1,10 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32" {...$$props}>
+<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512" {...$$props}>
 	<path
 		fill="none"
 		stroke="currentColor"
 		stroke-linecap="round"
 		stroke-linejoin="round"
-		stroke-width="2"
-		d="M27 8c0 1.657-4.925 3-11 3S5 9.657 5 8m22 0c0-1.657-4.925-3-11-3S5 6.343 5 8m22 0l-3 18s-1 2-8 2s-8-2-8-2L5 8m13.5 8.5l-5 5m0-5l5 5"
+		stroke-width="32"
+		d="m432 144l-28.67 275.74A32 32 0 0 1 371.55 448H140.46a32 32 0 0 1-31.78-28.26L80 144"
 	/>
+	<rect width="448" height="80" x="32" y="64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" rx="16" ry="16" />
+	<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M312 240L200 352m112 0L200 240" />
 </svg>

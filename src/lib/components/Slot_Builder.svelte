@@ -18,11 +18,11 @@
 	};
 
 	export let slots: Array<Slot> = [
-		default_slot,
-		{ name: 'Lunch', color: '#ffd000' },
-		{ name: 'Dinner', color: '#ffd000' },
-		{ name: 'Break', color: '#009dff' },
-		{ name: 'Study', color: '#ff0000' }
+		default_slot
+		// { name: 'Lunch', color: '#ffd000' },
+		// { name: 'Dinner', color: '#ffd000' },
+		// { name: 'Break', color: '#009dff' },
+		// { name: 'Study', color: '#ff0000' }
 	];
 	let slot_name_input: string;
 	let slot_color_input: string;
@@ -49,6 +49,8 @@
 		let idx = slots.findIndex((s) => s.name === slot_name);
 		slots.splice(idx, 1);
 		slots = [...slots];
+
+		active_slot_name = default_slot.name;
 	}
 
 	$: default_slot = slots[0];
@@ -79,7 +81,7 @@
 					<RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
 						<div
 							style:background-color={slot.color}
-							class="flex flex-row items-center w-full gap-1 px-1 py-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800"
+							class="flex flex-row items-center w-full gap-1 p-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800"
 						>
 							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
 							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="cursor-pointer">{slot.name}</Label.Root>
@@ -92,20 +94,6 @@
 							<Trash class="size-6"></Trash>
 						</Button.Root>
 					</div>
-
-					<!-- <RadioGroup.Item id={slot.name.toLowerCase().replaceAll(' ', '-')} value={slot.name} class="w-full">
-						<div style:background-color={slot.color} class="flex flex-row flex-grow min-w-0 gap-1 px-1 py-1 overflow-scroll border-2 rounded-sm text-ellipsis border-neutral-800">
-							<RadioGroup.ItemIndicator><Check class="size-6" /></RadioGroup.ItemIndicator>
-							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="cursor-pointer">{slot.name}</Label.Root>
-						</div>
-					</RadioGroup.Item>
-					<div class="flex flex-row items-center justify-center gap-4">
-						<ColorPicker label="" bind:hex={slot.color} components={{ input: ColorPickerInput }} />
-						<Button.Root on:click={() => deleteSlot(slot.name)} disabled={idx == 0} class={idx == 0 ? 'opacity-0' : ''}>
-							<span class="sr-only">Delete slot</span>
-							<Trash class="size-8"></Trash>
-						</Button.Root>
-					</div> -->
 				</div>
 			{/each}
 		</RadioGroup.Root>

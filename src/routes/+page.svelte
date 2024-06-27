@@ -51,11 +51,11 @@
 	};
 
 	let slots: Array<Slot> = [
-		default_slot,
-		{ name: 'Lunch', color: '#ffd000' },
-		{ name: 'Dinner', color: '#ffd000' },
-		{ name: 'Break', color: '#009dff' },
-		{ name: 'Study', color: '#ff0000' }
+		default_slot
+		// { name: 'Lunch', color: '#ffd000' },
+		// { name: 'Dinner', color: '#ffd000' },
+		// { name: 'Break', color: '#009dff' },
+		// { name: 'Study', color: '#ff0000' }
 	];
 
 	interface Timeblock {
@@ -108,19 +108,19 @@
 	<BlockBuilder bind:submitted_blocks={blocks} bind:submitted_increment={increment} bind:submitted_start_block={start_block} bind:submitted_end_block={end_block}
 	></BlockBuilder>
 	<div class="px-6 md:px-8">
-		<div class="justify-between max-w-md mx-auto md:grid md:grid-cols-2 md:grid-rows-1 md:max-w-4xl md:gap-8">
-			<div class="md:col-span-1 md:row-span-1">
+		<div class="justify-around max-w-md mx-auto md:flex md:flex-row md:max-w-4xl md:gap-8">
+			<div class="md:w-1/2">
 				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 			</div>
-			<div class="border-2 md:col-span-1 md:row-span-1 border-neutral-800">
+			<div class="md:w-1/2 md:flex md:flex-col">
 				{#each timeblocks as timeblock}
 					{#if timeblock.active_on_timetable}
-						<div style:background-color={timeblock.slot != undefined ? timeblock.slot.color : slots[0].color}>
-							<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row gap-2 py-2 hover:bg-neutral-300">
-								<p>{timeblock.block}</p>
-								{#if timeblock.slot != undefined}
-									<p>{timeblock.slot.name}</p>
-								{/if}
+						<div class="flex flex-row gap-2 mb-2">
+							<p class="text-xs text-right text-neutral-600 min-w-20">{timeblock.block}</p>
+							<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row justify-between w-full">
+								<div style:background-color={timeblock.slot.color} class="w-full p-1 border-2 rounded-sm bg-neutral-300 border-neutral-800">
+									<p class="{timeblock.slot.name == 'Default' ? 'opacity-0 cursor-default' : ''} text-center">{timeblock.slot.name}</p>
+								</div>
 							</Button.Root>
 						</div>
 					{/if}

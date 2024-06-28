@@ -35,7 +35,8 @@
 	];
 
 	let timeblocks: Array<Timeblock> = createTimeblock(blocks, start_block, end_block);
-	let active_slot: Slot;
+	let shifted_timeblocks: Array<Timeblock> = formatTimeblocks(timeblocks, start_block);
+	let active_slot: Slot = default_slot;
 
 	function createBlocks() {
 		let blocks: Array<string> = [];
@@ -59,6 +60,9 @@
 		let start_hour = Number(start_block.slice(0, 2));
 		let end_hour = Number(end_block.slice(0, 2));
 
+		if (start_hour > end_hour) end_hour += 24;
+		if (hour < start_hour) hour += 24;
+
 		return hour >= start_hour && hour <= end_hour;
 	}
 
@@ -80,23 +84,17 @@
 		return false;
 	}
 
-	// function formatTimeblocks(blocks: Array<string>, start_time: string, end_time: string) {
-	// 	// if starting and ending hour are not in the proper format, default to returning all blocks
-	// 	if (start_time.length != 4 || end_time.length != 4) return blocks;
+	function formatTimeblocks(timeblocks: Array<Timeblock>, start_block: string) {
+		let start_hour = start_block.slice(0, 2);
 
-	// 	let start_hour = start_time.slice(0, 2);
-	// 	let end_hour = end_time.slice(0, 2);
+		while (start_hour != timeblocks[0].block.slice(0, 2)) {
+			let first_el = timeblocks.shift()!;
+			timeblocks.push(first_el);
+			timeblocks = timeblocks;
+		}
 
-	// 	if (Number(start_hour) < 0 || Number(start_hour) >= 24) return blocks;
-	// 	if (Number(end_hour) < 0 || Number(end_hour) >= 24) return blocks;
-
-	// 	// format the blocks to the submitted start and end times
-	// 	while (start_hour != blocks[0].slice(0, 2)) {
-	// 		blocks = [...blocks, blocks.shift()!];
-	// 	}
-
-	// 	return blocks;
-	// }
+		return timeblocks;
+	}
 
 	function createTimeblock(blocks: Array<string>, start_block: string, end_block: string) {
 		let next_timeblocks: Array<Timeblock> = [];
@@ -140,6 +138,7 @@
 	}
 
 	$: timeblocks = updateTimeblocks(blocks, start_block, end_block, slots, timeblocks, increment);
+	$: shifted_timeblocks = formatTimeblocks(timeblocks, start_block);
 </script>
 
 <section>

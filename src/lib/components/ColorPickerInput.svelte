@@ -15,10 +15,10 @@
 
 	/** svelte-ignore unused-export-let */
 	export let isOpen: boolean;
+	isOpen;
 
 	function noop() {
 		/* prevent browser color picker from opening unless javascript is broken */
-		isOpen;
 	}
 </script>
 

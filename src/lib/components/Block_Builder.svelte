@@ -3,75 +3,17 @@
 	import RadioUnchecked from '$lib/icons/Radio_Unchecked.svelte';
 	import CaretUpDown from '$lib/icons/Caret_Up_Down.svelte';
 	import Check from '$lib/icons/Check.svelte';
-	import { RadioGroup, Select, Label, Button } from 'bits-ui';
 
-	const INCREMENTS = [
-		{
-			id: 'plus-fifteen-min',
-			value: '+0015',
-			label: '15m'
-		},
-		{
-			id: 'plus-thirty-min',
-			value: '+0030',
-			label: '30m'
-		},
-		{
-			id: 'plus-one-hr',
-			value: '+0100',
-			label: '1hr'
-		}
-	];
+	import { RadioGroup, Select, Label } from 'bits-ui';
 
-	interface BlockSelectionItem {
-		value: string;
-		label: string;
-	}
-
-	export let increment = '+0100';
-
-	export let blocks: Array<string> = createBlocks(increment);
-
-	let start_block_items: Array<BlockSelectionItem> = createBlockSelectItems(blocks, false, false);
-	let end_block_items: Array<BlockSelectionItem> = createBlockSelectItems(blocks, false, false);
-
-	let start_block_item: BlockSelectionItem;
-	let end_block_item: BlockSelectionItem;
-	export let start_block: string = '0900';
-	export let end_block: string = '1700';
-
-	// function formatBlocks(blocks: Array<string>, start_time: string, end_time: string) {
-	// 	// if starting and ending hour are not in the proper format, default to returning all blocks
-	// 	if (start_time.length != 4 || end_time.length != 4) return blocks;
-
-	// 	let start_hour = start_time.slice(0, 2);
-	// 	let end_hour = end_time.slice(0, 2);
-
-	// 	if (Number(start_hour) < 0 || Number(start_hour) >= 24) return blocks;
-	// 	if (Number(end_hour) < 0 || Number(end_hour) >= 24) return blocks;
-
-	// 	// format the blocks to the submitted start and end times
-	// 	while (start_hour != blocks[0].slice(0, 2)) {
-	// 		blocks = [...blocks, blocks.shift()!];
-	// 	}
-
-	// 	return blocks;
-	// }
-
-	function createBlocks(increment: string) {
+	function createBlocks() {
 		let blocks: Array<string> = [];
 		const MINUTE_VALUES: Array<string> = ['00', '15', '30', '45'];
 
-		// creates the list of all blocks with the increment provided
 		for (let hour = 0; hour < 24; hour++) {
 			let hour_value = ('0' + hour).slice(-2);
 
-			let minute_increment = MINUTE_VALUES.length;
-			if (increment == '+0100') minute_increment = 4;
-			else if (increment == '+0030') minute_increment = 2;
-			else if (increment == '+0015') minute_increment = 1;
-
-			for (let minute_idx = 0; minute_idx < MINUTE_VALUES.length; minute_idx += minute_increment) {
+			for (let minute_idx = 0; minute_idx < MINUTE_VALUES.length; minute_idx++) {
 				let minute_value = MINUTE_VALUES[minute_idx];
 
 				blocks = [...blocks, hour_value.concat(minute_value)];
@@ -122,13 +64,48 @@
 	}
 
 	function updateBlocks(increment: string) {
-		let updated_blocks = createBlocks(increment);
+		let updated_blocks = createBlocks();
 
 		return updated_blocks;
 	}
 
-	$: if (start_block_item != undefined) start_block = start_block_item.value;
-	$: if (end_block_item != undefined) end_block = end_block_item.value;
+	const INCREMENTS = [
+		{
+			id: 'plus-fifteen-min',
+			value: '+0015',
+			label: '15m'
+		},
+		{
+			id: 'plus-thirty-min',
+			value: '+0030',
+			label: '30m'
+		},
+		{
+			id: 'plus-one-hr',
+			value: '+0100',
+			label: '1hr'
+		}
+	];
+
+	interface BlockSelectionItem {
+		value: string;
+		label: string;
+	}
+
+	export let increment = '+0100';
+
+	export let blocks: Array<string> = createBlocks();
+
+	let start_block_items: Array<BlockSelectionItem> = createBlockSelectItems(blocks, false, false);
+	let end_block_items: Array<BlockSelectionItem> = createBlockSelectItems(blocks, false, false);
+
+	let start_block_item: BlockSelectionItem;
+	let end_block_item: BlockSelectionItem;
+	export let start_block: string = '0900';
+	export let end_block: string = '1700';
+
+	$: if (!isEmpty(start_block_item)) start_block = start_block_item.value;
+	$: if (!isEmpty(end_block_item)) end_block = end_block_item.value;
 
 	$: blocks = updateBlocks(increment);
 </script>

@@ -1,49 +1,25 @@
 <script lang="ts">
 	import SlotBuilder from '$lib/components/Slot_Builder.svelte';
 	import BlockBuilder from '$lib/components/Block_Builder.svelte';
+
 	import { Button } from 'bits-ui';
 
-	function createBlocks(increment: string) {
-		let blocks: Array<string> = [];
-		const MINUTE_VALUES: Array<string> = ['00', '15', '30', '45'];
-
-		// creates the list of all blocks with the increment provided
-		for (let hour = 0; hour < 24; hour++) {
-			let hour_value = ('0' + hour).slice(-2);
-
-			let minute_increment = MINUTE_VALUES.length;
-			if (increment == '+0100') minute_increment = 4;
-			else if (increment == '+0030') minute_increment = 2;
-			else if (increment == '+0015') minute_increment = 1;
-
-			for (let minute_idx = 0; minute_idx < MINUTE_VALUES.length; minute_idx += minute_increment) {
-				let minute_value = MINUTE_VALUES[minute_idx];
-
-				blocks.push(hour_value.concat(minute_value));
-			}
-		}
-
-		return blocks;
+	interface Slot {
+		name: string;
+		color: string;
 	}
 
-	function isWithinStartEnd(block: string, start_block: string, end_block: string) {
-		let hour = Number(block.slice(0, 2));
-		let start_hour = Number(start_block.slice(0, 2));
-		let end_hour = Number(end_block.slice(0, 2));
-
-		return hour >= start_hour && hour <= end_hour;
+	interface Timeblock {
+		active_on_timetable: boolean;
+		block: string;
+		slot: Slot;
 	}
 
 	let increment: string = '+0100';
 	let start_block: string = '0900';
 	let end_block: string = '1700';
 
-	let blocks: Array<string> = createBlocks(increment);
-
-	interface Slot {
-		name: string;
-		color: string;
-	}
+	let blocks: Array<string> = createBlocks();
 
 	let default_slot: Slot = {
 		name: 'Default',
@@ -58,50 +34,112 @@
 		// { name: 'Study', color: '#ff0000' }
 	];
 
-	interface Timeblock {
-		active_on_timetable: boolean;
-		block: string;
-		slot: Slot;
-	}
+	let timeblocks: Array<Timeblock> = createTimeblock(blocks, start_block, end_block);
+	let active_slot: Slot;
 
-	let timeblocks: Array<Timeblock> = createTimeblocks(blocks, start_block, end_block);
-	$: timeblocks = createTimeblocks(blocks, start_block, end_block);
+	function createBlocks() {
+		let blocks: Array<string> = [];
+		const MINUTE_VALUES: Array<string> = ['00', '15', '30', '45'];
 
-	function createTimeblocks(blocks: Array<string>, start_block: string, end_block: string) {
-		let timeblocks: Array<Timeblock> = [];
-		for (let idx = 0; idx < blocks.length; idx++) {
-			timeblocks.push({
-				active_on_timetable: isWithinStartEnd(blocks[idx], start_block, end_block),
-				block: blocks[idx],
-				slot: default_slot
-			});
+		for (let hour = 0; hour < 24; hour++) {
+			let hour_value = ('0' + hour).slice(-2);
+
+			for (let minute_idx = 0; minute_idx < MINUTE_VALUES.length; minute_idx++) {
+				let minute_value = MINUTE_VALUES[minute_idx];
+
+				blocks.push(hour_value.concat(minute_value));
+			}
 		}
 
-		return timeblocks;
+		return blocks;
 	}
 
-	$: timeblocks = updateTimeblocks(slots);
+	function isInBlockRange(block: string, start_block: string, end_block: string) {
+		let hour = Number(block.slice(0, 2));
+		let start_hour = Number(start_block.slice(0, 2));
+		let end_hour = Number(end_block.slice(0, 2));
 
-	function updateTimeblocks(slots: Array<Slot>) {
-		let updated_timeblocks: Array<Timeblock> = [];
+		return hour >= start_hour && hour <= end_hour;
+	}
+
+	function isInIncrement(block: string, increment: string) {
+		let minute = block.slice(2);
+
+		if (increment == '+0015') {
+			if (minute == '00' || minute == '15' || minute == '30' || minute == '45') return true;
+		}
+
+		if (increment == '+0030') {
+			if (minute == '00' || minute == '30') return true;
+		}
+
+		if (increment == '+0100') {
+			if (minute == '00') return true;
+		}
+
+		return false;
+	}
+
+	// function formatTimeblocks(blocks: Array<string>, start_time: string, end_time: string) {
+	// 	// if starting and ending hour are not in the proper format, default to returning all blocks
+	// 	if (start_time.length != 4 || end_time.length != 4) return blocks;
+
+	// 	let start_hour = start_time.slice(0, 2);
+	// 	let end_hour = end_time.slice(0, 2);
+
+	// 	if (Number(start_hour) < 0 || Number(start_hour) >= 24) return blocks;
+	// 	if (Number(end_hour) < 0 || Number(end_hour) >= 24) return blocks;
+
+	// 	// format the blocks to the submitted start and end times
+	// 	while (start_hour != blocks[0].slice(0, 2)) {
+	// 		blocks = [...blocks, blocks.shift()!];
+	// 	}
+
+	// 	return blocks;
+	// }
+
+	function createTimeblock(blocks: Array<string>, start_block: string, end_block: string) {
+		let next_timeblocks: Array<Timeblock> = [];
+
 		for (let idx = 0; idx < blocks.length; idx++) {
+			let timeblock: Timeblock = {
+				active_on_timetable: isInBlockRange(blocks[idx], start_block, end_block) && isInIncrement(blocks[idx], increment),
+				block: blocks[idx],
+				slot: default_slot
+			};
+
+			next_timeblocks.push(timeblock);
+		}
+
+		return next_timeblocks;
+	}
+
+	function updateTimeblocks(blocks: Array<string>, start_block: string, end_block: string, slots: Array<Slot>, prev_timeblocks: Array<Timeblock>, increment: string) {
+		let next_timeblocks: Array<Timeblock> = [];
+
+		for (let idx = 0; idx < blocks.length; idx++) {
+			let timeblock: Timeblock = {
+				active_on_timetable: isInBlockRange(blocks[idx], start_block, end_block) && isInIncrement(blocks[idx], increment),
+				block: blocks[idx],
+				slot: default_slot
+			};
+
+			if (prev_timeblocks[idx].slot.name != 'Default') timeblock.slot = prev_timeblocks[idx].slot;
+
 			let updated_slot = slots.filter(function (slot: Slot) {
-				return slot.name == timeblocks[idx].slot.name;
+				return slot.name == timeblock.slot.name;
 			})[0];
 
 			if (updated_slot == null) updated_slot = default_slot;
+			else timeblock.slot = updated_slot;
 
-			updated_timeblocks.push({
-				active_on_timetable: isWithinStartEnd(blocks[idx], start_block, end_block),
-				block: blocks[idx],
-				slot: updated_slot
-			});
+			next_timeblocks.push(timeblock);
 		}
 
-		return updated_timeblocks;
+		return next_timeblocks;
 	}
 
-	let active_slot: Slot;
+	$: timeblocks = updateTimeblocks(blocks, start_block, end_block, slots, timeblocks, increment);
 </script>
 
 <section>

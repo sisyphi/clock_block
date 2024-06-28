@@ -8,13 +8,13 @@
 	export let hex: string | undefined;
 
 	/** input label */
-	export let label: string;
+	// export let label: string;
 
 	/** input name, useful in a native form */
 	export let name: string | undefined = undefined;
 
-	/* svelte-ignore unused-export-let /** indicator of the popup state */
-	export let isOpen: boolean;
+	/* svelte-ignore unused-export-let*/
+	// export let isOpen: boolean;
 
 	function noop() {
 		/* prevent browser color picker from opening unless javascript is broken */

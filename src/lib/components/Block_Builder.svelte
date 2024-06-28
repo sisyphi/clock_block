@@ -28,19 +28,17 @@
 		label: string;
 	}
 
-	let increment = '+0100';
-	export let submitted_increment: string;
+	export let increment = '+0100';
 
-	let blocks: Array<string> = createBlocks(increment);
-	export let submitted_blocks: Array<string>;
+	export let blocks: Array<string> = createBlocks(increment);
 
-	let start_block_select_items: Array<BlockSelectionItem>;
-	let end_block_select_items: Array<BlockSelectionItem>;
+	let start_block_items: Array<BlockSelectionItem> = createBlockSelectItems(blocks, false, false);
+	let end_block_items: Array<BlockSelectionItem> = createBlockSelectItems(blocks, false, false);
 
-	let start_block: BlockSelectionItem;
-	let end_block: BlockSelectionItem;
-	export let submitted_start_block: string;
-	export let submitted_end_block: string;
+	let start_block_item: BlockSelectionItem;
+	let end_block_item: BlockSelectionItem;
+	export let start_block: string = '0900';
+	export let end_block: string = '1700';
 
 	// function formatBlocks(blocks: Array<string>, start_time: string, end_time: string) {
 	// 	// if starting and ending hour are not in the proper format, default to returning all blocks
@@ -99,19 +97,19 @@
 	}
 
 	function createBlockSelectItems(blocks: Array<string>, is_military_time: boolean, has_leading_zero: boolean) {
-		let block_select_items: Array<BlockSelectionItem> = [];
+		let block_items: Array<BlockSelectionItem> = [];
 
 		for (let idx = 0; idx < blocks.length; idx++) {
 			if (blocks[idx].slice(2) == '00') {
-				let new_block_select_item = {
+				let new_block_item = {
 					value: blocks[idx],
 					label: createBlockLabel(blocks[idx], is_military_time, has_leading_zero)
 				};
-				block_select_items = [...block_select_items, new_block_select_item];
+				block_items = [...block_items, new_block_item];
 			}
 		}
 
-		return block_select_items;
+		return block_items;
 	}
 
 	function isEmpty(obj: Object) {
@@ -123,38 +121,33 @@
 		return true;
 	}
 
-	function handleSubmitBlocks() {
-		if (isEmpty(start_block) || isEmpty(end_block)) return;
+	function updateBlocks(increment: string) {
+		let updated_blocks = createBlocks(increment);
 
-		submitted_increment = increment;
-		submitted_start_block = start_block.value;
-		submitted_end_block = end_block.value;
-
-		submitted_blocks = blocks;
+		return updated_blocks;
 	}
 
-	$: {
-		blocks = createBlocks(increment);
+	$: if (start_block_item != undefined) start_block = start_block_item.value;
+	$: if (end_block_item != undefined) end_block = end_block_item.value;
 
-		let block_select_items = createBlockSelectItems(blocks, false, false);
-
-		start_block_select_items = block_select_items;
-		end_block_select_items = block_select_items;
-	}
+	$: blocks = updateBlocks(increment);
 </script>
 
 <section class="px-6 py-4 md:px-8">
 	<div class="flex flex-col justify-center gap-2 mx-auto md:flex-row md:max-w-3xl">
 		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
 			<div class="">
-				<Select.Root bind:selected={start_block}>
-					<Select.Trigger aria-label="Select a start time" class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800">
+				<Select.Root bind:selected={start_block_item}>
+					<Select.Trigger
+						aria-label="Select a start time"
+						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800"
+					>
 						<Select.Value placeholder="Select a start time" />
 						<CaretUpDown class="size-6" />
 					</Select.Trigger>
 
 					<Select.Content class="p-2 my-2 overflow-scroll bg-white border outline-none max-h-64">
-						{#each start_block_select_items as start_time}
+						{#each start_block_items as start_time}
 							<Select.Item value={start_time.value} label={start_time.label} class="flex flex-row items-center justify-between p-2">
 								<Label.Root for={start_time.value}>{start_time.label}</Label.Root>
 								<Select.ItemIndicator>
@@ -166,14 +159,17 @@
 				</Select.Root>
 			</div>
 			<div class="">
-				<Select.Root bind:selected={end_block}>
-					<Select.Trigger aria-label="Select an end time" class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800">
+				<Select.Root bind:selected={end_block_item}>
+					<Select.Trigger
+						aria-label="Select an end time"
+						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800"
+					>
 						<Select.Value placeholder="Select an end time" />
 						<CaretUpDown class="size-6" />
 					</Select.Trigger>
 
 					<Select.Content class="p-2 my-2 overflow-scroll bg-white border outline-none max-h-64">
-						{#each end_block_select_items as end_time}
+						{#each end_block_items as end_time}
 							<Select.Item value={end_time.value} label={end_time.label} class="flex flex-row items-center justify-between p-2">
 								<Label.Root for={end_time.value}>{end_time.label}</Label.Root>
 								<Select.ItemIndicator>
@@ -196,9 +192,6 @@
 						</RadioGroup.Item>
 					{/each}
 				</RadioGroup.Root>
-			</div>
-			<div class="flex flex-row items-end justify-center text-white">
-				<Button.Root on:click={handleSubmitBlocks} class="px-4 py-1 rounded-sm bg-neutral-800">Build</Button.Root>
 			</div>
 		</div>
 	</div>

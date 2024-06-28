@@ -46,6 +46,9 @@
 			color: slot_color
 		};
 
+		active_slot = new_slot;
+		active_slot_name = active_slot.name;
+
 		slots = [...slots, new_slot];
 	}
 
@@ -103,13 +106,13 @@
 	<div>
 		<RadioGroup.Root bind:value={active_slot_name} class="flex flex-col gap-2">
 			{#each slots as slot, idx}
-				<div class="flex flex-row gap-4">
-					<RadioGroup.Item
-						id={slot.name.toLowerCase().replaceAll(' ', '-')}
-						value={slot.name}
-						on:keydown={(event) => deleteSlotOnBackspace(event, slot.name)}
-						class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36 [&[data-state=checked]>div>svg]:hidden [&[data-state=unchecked]>div>div>svg]:hidden"
-					>
+				<RadioGroup.Item
+					id={slot.name.toLowerCase().replaceAll(' ', '-')}
+					value={slot.name}
+					on:keydown={(event) => deleteSlotOnBackspace(event, slot.name)}
+					class="flex flex-row items-center gap-4 [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden"
+				>
+					<div class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
 						<div
 							style:background-color={slot.color}
 							class="flex flex-row items-center w-full p-1 text-left break-all border-2 rounded-sm whitespace-break-spaces border-neutral-800"
@@ -118,7 +121,7 @@
 							<div><RadioChecked class="size-6" /></div>
 							<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="mx-1 cursor-pointer">{slot.name}</Label.Root>
 						</div>
-					</RadioGroup.Item>
+					</div>
 					<div class="flex flex-row items-center justify-center gap-4">
 						<ColorPicker
 							label=""
@@ -134,7 +137,7 @@
 							<Trash class="size-6"></Trash>
 						</Button.Root>
 					</div>
-				</div>
+				</RadioGroup.Item>
 			{/each}
 		</RadioGroup.Root>
 	</div>

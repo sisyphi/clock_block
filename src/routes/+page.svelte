@@ -27,15 +27,14 @@
 	};
 
 	let slots: Array<Slot> = [
-		default_slot
-		// { name: 'Lunch', color: '#ffd000' },
-		// { name: 'Dinner', color: '#ffd000' },
-		// { name: 'Break', color: '#009dff' },
-		// { name: 'Study', color: '#ff0000' }
+		default_slot,
+		{ name: 'Lunch', color: '#ffd000' },
+		{ name: 'Dinner', color: '#ffd000' },
+		{ name: 'Break', color: '#009dff' },
+		{ name: 'Study', color: '#ff0000' }
 	];
 
 	let timeblocks: Array<Timeblock> = createTimeblock(blocks, start_block, end_block);
-	let shifted_timeblocks: Array<Timeblock> = formatTimeblocks(timeblocks, start_block);
 	let active_slot: Slot = default_slot;
 
 	function createBlocks() {
@@ -84,7 +83,7 @@
 		return false;
 	}
 
-	function formatTimeblocks(timeblocks: Array<Timeblock>, start_block: string) {
+	function shiftTimeblocks(timeblocks: Array<Timeblock>, start_block: string) {
 		let start_hour = start_block.slice(0, 2);
 
 		while (start_hour != timeblocks[0].block.slice(0, 2)) {
@@ -112,13 +111,13 @@
 		return next_timeblocks;
 	}
 
-	function updateTimeblocks(blocks: Array<string>, start_block: string, end_block: string, slots: Array<Slot>, prev_timeblocks: Array<Timeblock>, increment: string) {
+	function updateTimeblocks(start_block: string, end_block: string, slots: Array<Slot>, prev_timeblocks: Array<Timeblock>, increment: string) {
 		let next_timeblocks: Array<Timeblock> = [];
 
-		for (let idx = 0; idx < blocks.length; idx++) {
+		for (let idx = 0; idx < prev_timeblocks.length; idx++) {
 			let timeblock: Timeblock = {
-				active_on_timetable: isInBlockRange(blocks[idx], start_block, end_block) && isInIncrement(blocks[idx], increment),
-				block: blocks[idx],
+				active_on_timetable: isInBlockRange(prev_timeblocks[idx].block, start_block, end_block) && isInIncrement(prev_timeblocks[idx].block, increment),
+				block: prev_timeblocks[idx].block,
 				slot: default_slot
 			};
 
@@ -137,8 +136,16 @@
 		return next_timeblocks;
 	}
 
-	$: timeblocks = updateTimeblocks(blocks, start_block, end_block, slots, timeblocks, increment);
-	$: shifted_timeblocks = formatTimeblocks(timeblocks, start_block);
+	$: {
+		timeblocks = updateTimeblocks(start_block, end_block, slots, timeblocks, increment);
+
+		timeblocks = shiftTimeblocks(timeblocks, start_block);
+	}
+
+	function insertSlot(timeblock: Timeblock, active_slot: Slot) {
+		timeblock.slot = active_slot;
+		timeblocks = [...timeblocks];
+	}
 </script>
 
 <section>
@@ -154,9 +161,14 @@
 					{#if timeblock.active_on_timetable}
 						<div class="flex flex-row gap-2 mb-2">
 							<p class="text-xs text-right text-neutral-600 min-w-20">{timeblock.block}</p>
-							<Button.Root on:click={() => (timeblock.slot = active_slot)} class="flex flex-row justify-between w-full">
+							<Button.Root
+								on:click={() => insertSlot(timeblock, active_slot)}
+								class="{active_slot.name == timeblock.slot.name ? 'cursor-default' : 'cursor-pointer'} flex flex-row justify-between w-full"
+							>
 								<div style:background-color={timeblock.slot.color} class="w-full p-1 border-2 rounded-sm bg-neutral-300 border-neutral-800">
-									<p class="{timeblock.slot.name == 'Default' ? 'opacity-0 cursor-default select-none' : ''} text-center">{timeblock.slot.name}</p>
+									<p class="{timeblock.slot.name == 'Default' ? 'opacity-0 select-none' : ''} text-center">
+										{timeblock.slot.name}
+									</p>
 								</div>
 							</Button.Root>
 						</div>

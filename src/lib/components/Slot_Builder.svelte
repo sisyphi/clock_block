@@ -131,9 +131,9 @@
 
 <section>
 	<form on:submit|preventDefault={resetForm}>
-		<div class="flex flex-row items-center justify-between gap-4 mx-auto mb-2">
+		<div class="flex flex-row items-center justify-between gap-2 mx-auto mb-2">
 			<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" class="flex-grow px-2 py-1 border-2 rounded-sm min-w-36 border-neutral-800" />
-			<div class="flex flex-row items-center gap-4">
+			<div class="flex flex-row items-center gap-2">
 				<ColorPicker
 					label=""
 					bind:hex={slot_color_input}
@@ -155,7 +155,7 @@
 				<RadioGroup.Item
 					id={slot.name.toLowerCase().replaceAll(' ', '-')}
 					value={slot.name}
-					class="flex flex-row items-center gap-4 [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden"
+					class="flex flex-row items-center gap-2 [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden"
 				>
 					<div class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
 						<div style:background-color={slot.color} class="flex flex-row items-center w-full p-1 text-left break-all border-2 whitespace-break-spaces border-neutral-800">
@@ -182,7 +182,7 @@
 							{/if}
 						</div>
 					</div>
-					<div class="flex flex-row items-center justify-center gap-4">
+					<div class="flex flex-row items-center justify-center gap-2">
 						<ColorPicker
 							label=""
 							bind:hex={slot.color}

@@ -26,6 +26,7 @@
 	use:trapFocus - Trap Focus within Menu
 	use:closeOnClickOutside & on:outclick - Close Menu on Outside Click
 -->
+
 <div
 	use:trapFocus
 	use:closeOnClickOutside
@@ -45,7 +46,7 @@
 	</div>
 
 	<div class="flex flex-col w-full py-4 text-left">
-		<a on:click={closeMenu} href="/about" class="inline-flex items-center px-4 py-2 hover:underline"><span>Learn</span></a>
+		<a on:click={closeMenu} href="/timeblock-builder/about" class="inline-flex items-center px-4 py-2 hover:underline"><span>Learn</span></a>
 		<a
 			on:click={closeMenu}
 			href="/timeblock-builder"

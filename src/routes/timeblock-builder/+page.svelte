@@ -152,10 +152,6 @@
 	<BlockBuilder bind:blocks bind:increment bind:start_block bind:end_block></BlockBuilder>
 	<div class="px-6 md:px-8">
 		<div class="justify-around max-w-md mx-auto md:flex md:flex-row md:max-w-2xl md:gap-4">
-			<div class="md:w-1/2">
-				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
-			</div>
-
 			<div class="md:w-1/2 md:flex md:flex-col">
 				{#each timeblocks as timeblock}
 					{#if timeblock.active_on_timetable}
@@ -174,6 +170,10 @@
 						</div>
 					{/if}
 				{/each}
+			</div>
+
+			<div class="md:w-1/2">
+				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 			</div>
 		</div>
 	</div>

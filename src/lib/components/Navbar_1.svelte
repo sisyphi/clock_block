@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="hidden md:py-0 md:flex md:flex-row md:w-auto">
-			<a on:click={closeMenu} href="/about" class="inline-flex items-center px-4 py-2 hover:underline"><span>Learn</span></a>
+			<a on:click={closeMenu} href="/timeblock-builder/about" class="inline-flex items-center px-4 py-2 hover:underline"><span>Learn</span></a>
 			<a
 				on:click={closeMenu}
 				href="/timeblock-builder"

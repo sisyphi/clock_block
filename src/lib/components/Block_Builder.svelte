@@ -73,17 +73,17 @@
 		{
 			id: 'plus-fifteen-min',
 			value: '+0015',
-			label: '15m'
+			label: '+15m'
 		},
 		{
 			id: 'plus-thirty-min',
 			value: '+0030',
-			label: '30m'
+			label: '+30m'
 		},
 		{
 			id: 'plus-one-hr',
 			value: '+0100',
-			label: '1hr'
+			label: '+1hr'
 		}
 	];
 
@@ -110,7 +110,7 @@
 	$: blocks = updateBlocks(increment);
 </script>
 
-<section class="px-6 py-4 md:px-8">
+<section class="px-6 pt-8 pb-4 md:px-8">
 	<div class="flex flex-col justify-between gap-2 mx-auto md:flex-row md:max-w-2xl">
 		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
 			<div class="">
@@ -168,10 +168,7 @@
 		</div>
 		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
 			<div class="">
-				<RadioGroup.Root
-					bind:value={increment}
-					class="flex flex-row justify-center gap-2 px-2 py-1 mx-auto bg-white border-2 rounded-sm border-neutral-800 w-fit text-neutral-800"
-				>
+				<RadioGroup.Root bind:value={increment} class="flex flex-row justify-center p-1 mx-auto bg-white border-2 rounded-sm border-neutral-800 w-fit text-neutral-800">
 					{#each INCREMENTS as increment}
 						<RadioGroup.Item
 							id={increment.id}

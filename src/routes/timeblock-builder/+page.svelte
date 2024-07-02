@@ -151,7 +151,7 @@
 <section>
 	<BlockBuilder bind:blocks bind:increment bind:start_block bind:end_block></BlockBuilder>
 	<div class="px-6 md:px-8">
-		<div class="justify-around max-w-md mx-auto md:flex md:flex-row md:max-w-4xl md:gap-8">
+		<div class="justify-around max-w-md mx-auto md:flex md:flex-row md:max-w-2xl md:gap-4">
 			<div class="md:w-1/2">
 				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 			</div>
@@ -160,7 +160,7 @@
 				{#each timeblocks as timeblock}
 					{#if timeblock.active_on_timetable}
 						<div class="flex flex-row gap-2 mb-2">
-							<p class="text-xs text-right text-neutral-600 min-w-20">{timeblock.block}</p>
+							<p class="text-xs text-right text-neutral-600 min-w-8">{timeblock.block}</p>
 							<Button.Root
 								on:click={() => insertSlot(timeblock, active_slot)}
 								class="{active_slot.name == timeblock.slot.name ? 'cursor-default' : 'cursor-pointer'} flex flex-row justify-between w-full"

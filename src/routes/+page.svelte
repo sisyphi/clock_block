@@ -1,5 +1,5 @@
 <section class="flex flex-col items-center content-center justify-center gap-4 pb-12 h-svh">
-	<h1 class="text-4xl italic font-bold text-center">What is your <br /><span class="underline">ideal day?</span></h1>
+	<h1 class="text-4xl font-bold text-center">What is your <br /><span class="italic">ideal day?</span></h1>
 	<p class="text-base">Show us your perfect schedule</p>
 	<a
 		href="/timeblock-builder"

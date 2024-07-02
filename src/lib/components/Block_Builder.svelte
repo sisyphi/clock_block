@@ -111,13 +111,13 @@
 </script>
 
 <section class="px-6 py-4 md:px-8">
-	<div class="flex flex-col justify-center gap-2 mx-auto md:flex-row md:max-w-3xl">
+	<div class="flex flex-col justify-between gap-2 mx-auto md:flex-row md:max-w-2xl">
 		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
 			<div class="">
 				<Select.Root bind:selected={start_block_item}>
 					<Select.Trigger
 						aria-label="Select a start time"
-						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800"
+						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-52 bg-neutral-800"
 					>
 						<Select.Value placeholder="Select a start time" />
 						<CaretUpDown class="size-6" />
@@ -139,7 +139,7 @@
 				<Select.Root bind:selected={end_block_item}>
 					<Select.Trigger
 						aria-label="Select an end time"
-						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-48 bg-neutral-800"
+						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-white rounded-sm min-w-52 bg-neutral-800"
 					>
 						<Select.Value placeholder="Select an end time" />
 						<CaretUpDown class="size-6" />

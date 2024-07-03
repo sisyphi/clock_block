@@ -13,6 +13,7 @@
 		active_on_timetable: boolean;
 		block: string;
 		slot: Slot;
+		active_slot: Slot;
 	}
 
 	let increment: string = '+0100';
@@ -28,10 +29,9 @@
 
 	let slots: Array<Slot> = [
 		default_slot,
-		{ name: 'Lunch', color: '#ffd000' },
-		{ name: 'Dinner', color: '#ffd000' },
-		{ name: 'Break', color: '#009dff' },
-		{ name: 'Study', color: '#ff0000' }
+		{ name: 'Click to select', color: '#ffd000' },
+		{ name: 'Double click to rename', color: '#009dff' },
+		{ name: 'Recolor & Delete', color: '#ff0000' }
 	];
 
 	let timeblocks: Array<Timeblock> = createTimeblock(blocks, start_block, end_block);
@@ -102,7 +102,8 @@
 			let timeblock: Timeblock = {
 				active_on_timetable: isInBlockRange(blocks[idx], start_block, end_block) && isInIncrement(blocks[idx], increment),
 				block: blocks[idx],
-				slot: default_slot
+				slot: default_slot,
+				active_slot: default_slot
 			};
 
 			next_timeblocks.push(timeblock);
@@ -118,7 +119,8 @@
 			let timeblock: Timeblock = {
 				active_on_timetable: isInBlockRange(prev_timeblocks[idx].block, start_block, end_block) && isInIncrement(prev_timeblocks[idx].block, increment),
 				block: prev_timeblocks[idx].block,
-				slot: default_slot
+				slot: default_slot,
+				active_slot: prev_timeblocks[idx].active_slot
 			};
 
 			if (prev_timeblocks[idx].slot.name != 'Default') timeblock.slot = prev_timeblocks[idx].slot;
@@ -146,6 +148,11 @@
 		timeblock.slot = active_slot;
 		timeblocks = [...timeblocks];
 	}
+
+	function handleBGColor(timeblock: Timeblock, active_slot: Slot) {
+		timeblock.active_slot = active_slot;
+		timeblocks = [...timeblocks];
+	}
 </script>
 
 <section>
@@ -159,11 +166,13 @@
 							<p class="text-xs text-right text-neutral-600 min-w-8">{timeblock.block}</p>
 							<Button.Root
 								on:click={() => insertSlot(timeblock, active_slot)}
+								on:mouseenter={() => handleBGColor(timeblock, active_slot)}
+								on:mouseleave={() => handleBGColor(timeblock, timeblock.slot)}
 								class="{active_slot.name == timeblock.slot.name ? 'cursor-default' : 'cursor-pointer'} flex flex-row justify-between w-full"
 							>
-								<div style:background-color={timeblock.slot.color} class="w-full p-1 border-2 rounded-sm bg-neutral-300 border-neutral-800">
-									<p class="{timeblock.slot.name == 'Default' ? 'opacity-0 select-none' : ''} text-center">
-										{timeblock.slot.name}
+								<div style:background-color={timeblock.active_slot.color} class="w-full p-1 border-2 rounded-sm border-neutral-800">
+									<p class="{timeblock.active_slot.name == 'Default' ? 'opacity-0 select-none' : ''} text-center">
+										{timeblock.active_slot.name}
 									</p>
 								</div>
 							</Button.Root>

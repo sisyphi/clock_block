@@ -136,7 +136,7 @@
 				placeholder="Enter slot name"
 				class="flex-grow px-2 py-1 border-2 rounded-sm min-w-36 border-offblack bg-offwhite placeholder:text-offblack/80"
 			/>
-			<div class="flex flex-row items-center gap-2">
+			<div class="flex flex-row items-center">
 				<ColorPicker
 					label=""
 					bind:hex={slot_color_input}
@@ -145,9 +145,9 @@
 					isAlpha={false}
 					components={{ ...ChromeVariant, input: ColorPickerInput, wrapper: ColorPickerWrapper }}
 				/>
-				<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)}>
+				<Button.Root on:click={() => createSlot(slot_name_input, slot_color_input)} class="p-2 rounded-sm text-offblack hover:text-offwhite hover:bg-offblack bg-offwhite">
 					<span class="sr-only">Create slot</span>
-					<PlusCircle class="size-6"></PlusCircle>
+					<PlusCircle class="size-5"></PlusCircle>
 				</Button.Root>
 			</div>
 		</div>
@@ -158,18 +158,18 @@
 				<RadioGroup.Item
 					id={slot.name.toLowerCase().replaceAll(' ', '-')}
 					value={slot.name}
-					class="flex flex-row items-center gap-2 [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden"
+					class="flex flex-row items-center gap-2 hover:underline [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden"
 				>
 					<div class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
 						<div style:background-color={slot.color} class="flex flex-row items-center w-full p-1 text-left break-all border-2 offwhitespace-break-spaces border-offblack">
 							<RadioUnchecked class="size-6" />
 							<div><RadioChecked class="size-6" /></div>
 							{#if idx == 0}
-								<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="mx-1">
+								<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="mx-1 cursor-pointer">
 									<p>{slot.name}</p></Label.Root
 								>
 							{:else if !slot.is_editing}
-								<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="mx-1">
+								<Label.Root for={slot.name.toLowerCase().replaceAll(' ', '-')} class="mx-1 cursor-pointer ">
 									<p on:dblclick={() => toggleEditing(slot)}>{slot.name}</p></Label.Root
 								>
 							{:else}
@@ -185,7 +185,7 @@
 							{/if}
 						</div>
 					</div>
-					<div class="flex flex-row items-center justify-center gap-2">
+					<div class="flex flex-row items-center justify-center">
 						<ColorPicker
 							label=""
 							bind:hex={slot.color}
@@ -194,9 +194,13 @@
 							isAlpha={false}
 							components={{ ...ChromeVariant, input: ColorPickerInput, wrapper: ColorPickerWrapper }}
 						/>
-						<Button.Root on:click={() => deleteSlot(slot.name)} disabled={idx == 0} class={idx == 0 ? 'opacity-0' : ''}>
+						<Button.Root
+							on:click={() => deleteSlot(slot.name)}
+							disabled={idx == 0}
+							class="{idx == 0 ? 'opacity-0' : ''} p-2 rounded-sm  text-offblack hover:text-offwhite hover:bg-offblack bg-offwhite"
+						>
 							<span class="sr-only">Delete slot</span>
-							<Trash class="size-6"></Trash>
+							<Trash class="size-5"></Trash>
 						</Button.Root>
 					</div>
 				</RadioGroup.Item>

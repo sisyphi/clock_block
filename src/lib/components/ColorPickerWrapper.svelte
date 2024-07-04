@@ -9,7 +9,7 @@
 	export let isDialog: boolean;
 </script>
 
-<div class="wrapper" bind:this={wrapper} class:is-open={isOpen} role={isDialog ? 'dialog' : undefined} aria-label="color picker">
+<div bind:this={wrapper} class:is-open={isOpen} role={isDialog ? 'dialog' : undefined} aria-label="color picker" class="wrapper">
 	<slot />
 </div>
 

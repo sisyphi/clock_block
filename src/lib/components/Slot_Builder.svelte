@@ -158,7 +158,9 @@
 				<RadioGroup.Item
 					id={slot.name.toLowerCase().replaceAll(' ', '-')}
 					value={slot.name}
-					class="flex flex-row items-center gap-2 hover:underline [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden"
+					class="flex flex-row items-center gap-2 [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden {slot.is_editing
+						? 'hover:no-underline'
+						: 'hover:underline'}"
 				>
 					<div class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
 						<div style:background-color={slot.color} class="flex flex-row items-center w-full p-1 text-left break-all border-2 offwhitespace-break-spaces border-offblack">

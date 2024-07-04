@@ -8,7 +8,12 @@ export default {
 			xs: '525px',
 			...defaultTheme.screens
 		},
-		extend: {}
+		extend: {
+			colors: {
+				offwhite: '#E8E5DE',
+				offblack: '#333333'
+			}
+		}
 	},
 	plugins: []
 };

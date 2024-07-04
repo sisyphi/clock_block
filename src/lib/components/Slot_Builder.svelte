@@ -1,9 +1,8 @@
 <script lang="ts">
 	import ColorPicker, { ChromeVariant } from 'svelte-awesome-color-picker';
 	import ColorPickerInput from './ColorPickerInput.svelte';
-	import Check from '$lib/icons/Check.svelte';
 
-	import { Label, RadioGroup, Button, type CustomEventHandler } from 'bits-ui';
+	import { Label, RadioGroup, Button } from 'bits-ui';
 	import PlusCircle from '$lib/icons/Plus_Circle.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
 	import RadioChecked from '$lib/icons/Radio_Checked.svelte';
@@ -18,15 +17,14 @@
 
 	export let default_slot: Slot = {
 		name: 'Default',
-		color: '#ABABAB'
+		color: '#E8E5DE'
 	};
 
 	export let slots: Array<Slot> = [
 		default_slot,
-		{ name: 'Lunch', color: '#ffd000', is_editing: false },
-		{ name: 'Dinner', color: '#ffd000', is_editing: false },
-		{ name: 'Break', color: '#009dff', is_editing: false },
-		{ name: 'Study', color: '#ff0000', is_editing: false }
+		{ name: 'Click to select', color: '#ffd000' },
+		{ name: 'Double click to rename', color: '#009dff' },
+		{ name: 'Recolor & Delete', color: '#ff0000' }
 	];
 
 	let slot_name_input: string;
@@ -88,7 +86,7 @@
 		slots = [...slots];
 	}
 
-	function updateSlot(prev_name: string, next_name: string) {
+	function updateSlotName(prev_name: string, next_name: string) {
 		let num_similar_slots = slots.filter(function (slot: Slot) {
 			return slot.name == next_name;
 		}).length;
@@ -113,7 +111,7 @@
 				target_element.blur();
 				break;
 			case 'Enter':
-				updateSlot(slot.name, target_element.value);
+				updateSlotName(slot.name, target_element.value);
 				target_element.blur();
 				break;
 		}
@@ -132,7 +130,12 @@
 <section>
 	<form on:submit|preventDefault={resetForm}>
 		<div class="flex flex-row items-center justify-between gap-2 mx-auto mb-2">
-			<input bind:value={slot_name_input} type="text" placeholder="Enter slot name" class="flex-grow px-2 py-1 border-2 rounded-sm min-w-36 border-neutral-800" />
+			<input
+				bind:value={slot_name_input}
+				type="text"
+				placeholder="Enter slot name"
+				class="flex-grow px-2 py-1 border-2 rounded-sm min-w-36 border-offblack bg-offwhite placeholder:text-offblack/80"
+			/>
 			<div class="flex flex-row items-center gap-2">
 				<ColorPicker
 					label=""
@@ -158,7 +161,7 @@
 					class="flex flex-row items-center gap-2 [&[data-state=checked]>div>div>svg]:hidden [&[data-state=unchecked]>div>div>div>svg]:hidden"
 				>
 					<div class="flex flex-row items-center justify-start flex-grow gap-1 min-w-36">
-						<div style:background-color={slot.color} class="flex flex-row items-center w-full p-1 text-left break-all border-2 whitespace-break-spaces border-neutral-800">
+						<div style:background-color={slot.color} class="flex flex-row items-center w-full p-1 text-left break-all border-2 offwhitespace-break-spaces border-offblack">
 							<RadioUnchecked class="size-6" />
 							<div><RadioChecked class="size-6" /></div>
 							{#if idx == 0}
@@ -187,10 +190,9 @@
 							label=""
 							bind:hex={slot.color}
 							sliderDirection="horizontal"
+							isDark={true}
 							isAlpha={false}
-							isTextInput={false}
-							components={{ ...ChromeVariant, input: ColorPickerInput }}
-							--focus-color="grey"
+							components={{ ...ChromeVariant, input: ColorPickerInput, wrapper: ColorPickerWrapper }}
 						/>
 						<Button.Root on:click={() => deleteSlot(slot.name)} disabled={idx == 0} class={idx == 0 ? 'opacity-0' : ''}>
 							<span class="sr-only">Delete slot</span>

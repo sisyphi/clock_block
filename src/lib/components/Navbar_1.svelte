@@ -17,15 +17,15 @@
 	$: MenuClasses = isMenuOpen ? 'flex' : 'hidden';
 </script>
 
-<header class="px-6 py-2 text-base font-bold text-center bg-white text-neutral-800 md:px-8 md:py-4">
-	<nav class="flex flex-wrap justify-between max-w-6xl mx-auto md:flex-nowrap">
+<header class="px-6 py-2 text-base font-bold text-center bg-offwhite border-b-2 text-offblack md:px-8 md:py-4 border-offblack">
+	<nav class="flex flex-wrap justify-between max-w-2xl mx-auto md:flex-nowrap">
 		<div class="flex justify-between w-full md:w-auto">
 			<a href="/timeblock-builder" class="self-center">
 				<span class="sr-only">Clock Block</span>
-				<img src="" alt="Clock Block Logo" />
+				<img src="" alt="Clock Block" />
 			</a>
 
-			<button on:click={openMenu} aria-expanded={isMenuOpen} class="p-2 rounded-sm md:hidden hover:bg-neutral-800 hover:text-white">
+			<button on:click={openMenu} aria-expanded={isMenuOpen} class="p-2 rounded-sm md:hidden hover:bg-offblack hover:text-offwhite">
 				<span class="sr-only">Open main menu</span>
 				<Hamburger class="size-6"></Hamburger>
 			</button>
@@ -37,7 +37,7 @@
 			<a
 				on:click={closeMenu}
 				href="/timeblock-builder"
-				class="content-center justify-center px-4 py-1 ml-4 bg-white border-2 rounded-sm border-neutral-800 hover:bg-neutral-800 hover:text-white text-neutral-800"
+				class="content-center justify-center px-4 py-1 ml-4 bg-offwhite border-2 rounded-sm border-offblack hover:bg-offblack hover:text-offwhite text-offblack"
 			>
 				<span>Build</span>
 			</a>

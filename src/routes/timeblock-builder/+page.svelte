@@ -24,7 +24,7 @@
 
 	let default_slot: Slot = {
 		name: 'Default',
-		color: '#ABABAB'
+		color: '#E8E5DE'
 	};
 
 	let slots: Array<Slot> = [
@@ -119,18 +119,19 @@
 			let timeblock: Timeblock = {
 				active_on_timetable: isInBlockRange(prev_timeblocks[idx].block, start_block, end_block) && isInIncrement(prev_timeblocks[idx].block, increment),
 				block: prev_timeblocks[idx].block,
-				slot: default_slot,
+				slot: prev_timeblocks[idx].slot,
 				active_slot: prev_timeblocks[idx].active_slot
 			};
-
-			if (prev_timeblocks[idx].slot.name != 'Default') timeblock.slot = prev_timeblocks[idx].slot;
 
 			let updated_slot = slots.filter(function (slot: Slot) {
 				return slot.name == timeblock.slot.name;
 			})[0];
 
 			if (updated_slot == null) updated_slot = default_slot;
-			else timeblock.slot = updated_slot;
+			else {
+				timeblock.slot = updated_slot;
+				// active_slot = updated_slot;
+			}
 
 			next_timeblocks.push(timeblock);
 		}
@@ -156,8 +157,11 @@
 </script>
 
 <section>
-	<BlockBuilder bind:blocks bind:increment bind:start_block bind:end_block></BlockBuilder>
 	<div class="px-6 md:px-8">
+		<div class="py-4">
+			<BlockBuilder bind:blocks bind:increment bind:start_block bind:end_block></BlockBuilder>
+		</div>
+
 		<div class="justify-around max-w-md mx-auto md:flex md:flex-row md:max-w-2xl md:gap-4">
 			<div class="md:w-1/2 md:flex md:flex-col">
 				{#each timeblocks as timeblock}
@@ -170,7 +174,7 @@
 								on:mouseleave={() => handleBGColor(timeblock, timeblock.slot)}
 								class="{active_slot.name == timeblock.slot.name ? 'cursor-default' : 'cursor-pointer'} flex flex-row justify-between w-full"
 							>
-								<div style:background-color={timeblock.active_slot.color} class="w-full p-1 border-2 rounded-sm border-neutral-800">
+								<div style:background-color={timeblock.active_slot.color} class="w-full p-1 border-2 rounded-sm border-offblack">
 									<p class="{timeblock.active_slot.name == 'Default' ? 'opacity-0 select-none' : ''} text-center">
 										{timeblock.active_slot.name}
 									</p>

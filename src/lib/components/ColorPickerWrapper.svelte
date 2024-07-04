@@ -33,7 +33,7 @@ import { ChromeVariant } from 'svelte-awesome-color-picker';
 -->
 <style>
 	div {
-		background-color: var(--cp-bg-color, white);
+		background-color: var(--cp-bg-color, offwhite);
 		margin: 0 10px 15px;
 		border: 1px solid var(--cp-border-color, black);
 		border-radius: 8px;

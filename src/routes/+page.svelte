@@ -3,7 +3,7 @@
 	<p class="text-base">Show us your perfect schedule</p>
 	<a
 		href="/timeblock-builder"
-		class="flex flex-row items-center content-center justify-center px-6 py-3 text-lg font-bold text-center border-2 rounded-md text-neutral-800 border-neutral-800 hover:bg-neutral-800 hover:text-white"
+		class="flex flex-row items-center content-center justify-center px-6 py-3 text-lg font-bold text-center border-2 rounded-md text-offblack border-offblack hover:bg-offblack hover:text-offwhite"
 	>
 		Let's Start!
 	</a>

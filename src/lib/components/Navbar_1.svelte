@@ -17,7 +17,7 @@
 	$: MenuClasses = isMenuOpen ? 'flex' : 'hidden';
 </script>
 
-<header class="px-6 py-2 text-base font-bold text-center bg-offwhite border-b-2 text-offblack md:px-8 md:py-4 border-offblack">
+<header class="px-6 py-1 text-base font-bold text-center border-b-2 bg-offwhite text-offblack md:px-8 md:py-2 border-offblack">
 	<nav class="flex flex-wrap justify-between max-w-2xl mx-auto md:flex-nowrap">
 		<div class="flex justify-between w-full md:w-auto">
 			<a href="/timeblock-builder" class="self-center">
@@ -27,7 +27,7 @@
 
 			<button on:click={openMenu} aria-expanded={isMenuOpen} class="p-2 rounded-sm md:hidden hover:bg-offblack hover:text-offwhite">
 				<span class="sr-only">Open main menu</span>
-				<Hamburger class="size-6"></Hamburger>
+				<Hamburger class="size-5"></Hamburger>
 			</button>
 		</div>
 
@@ -37,7 +37,7 @@
 			<a
 				on:click={closeMenu}
 				href="/timeblock-builder"
-				class="content-center justify-center px-4 py-1 ml-4 bg-offwhite border-2 rounded-sm border-offblack hover:bg-offblack hover:text-offwhite text-offblack"
+				class="content-center justify-center px-4 ml-4 border-2 rounded-sm bg-offwhite border-offblack hover:bg-offblack hover:text-offwhite text-offblack"
 			>
 				<span>Build</span>
 			</a>

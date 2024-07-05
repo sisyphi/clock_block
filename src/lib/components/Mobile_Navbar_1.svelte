@@ -31,7 +31,7 @@
 	use:trapFocus
 	use:closeOnClickOutside
 	on:outclick={closeMenu}
-	class="absolute inset-0 z-50 h-screen px-6 py-2 overflow-scroll border-r-2 shadow-lg bg-offwhite w-72 md:px-8 md:py-4 border-offblack"
+	class="absolute inset-0 z-50 h-screen px-6 py-1 overflow-scroll border-r-2 shadow-lg bg-offwhite w-72 md:px-8 md:py-4 border-offblack"
 >
 	<div class="flex justify-between w-auto">
 		<a href="/timeblock-builder" class="self-center">
@@ -41,7 +41,7 @@
 
 		<button on:click={closeMenu} aria-expanded={isMenuOpen} class="p-2 rounded-sm hover:text-offwhite hover:bg-offblack">
 			<span class="sr-only">Close main Menu</span>
-			<Close class="size-6"></Close>
+			<Close class="size-5"></Close>
 		</button>
 	</div>
 

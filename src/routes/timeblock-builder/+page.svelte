@@ -3,6 +3,7 @@
 	import BlockBuilder from '$lib/components/Block_Builder.svelte';
 
 	import { Button } from 'bits-ui';
+	import Clock from '$lib/components/Clock.svelte';
 
 	interface Slot {
 		name: string;
@@ -189,5 +190,10 @@
 				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 			</div>
 		</div>
+	</div>
+</section>
+<section>
+	<div class="flex flex-row justify-center mx-auto">
+		<Clock></Clock>
 	</div>
 </section>

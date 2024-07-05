@@ -194,6 +194,6 @@
 </section>
 <section>
 	<div class="flex flex-row justify-center mx-auto">
-		<Clock></Clock>
+		<Clock {timeblocks} {increment}></Clock>
 	</div>
 </section>

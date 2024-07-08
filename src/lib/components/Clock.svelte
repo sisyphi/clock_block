@@ -16,29 +16,48 @@
 	export let timeblocks: Array<Timeblock>;
 	export let increment: string;
 
-	let increment_arc: number;
-	let increment_idx: number;
+	let clock_timeblocks: Array<Timeblock>;
+
+	$: {
+		clock_timeblocks = structuredClone(timeblocks);
+		clock_timeblocks = shiftTimeblocks(clock_timeblocks, '0000');
+	}
+
+	let num_arcs: number;
+	let inc_idx_offset: number;
+
+	function shiftTimeblocks(timeblocks: Array<Timeblock>, start_block: string) {
+		let start_hour = start_block.slice(0, 2);
+
+		while (start_hour != timeblocks[0].block.slice(0, 2)) {
+			let first_el = timeblocks.shift()!;
+			timeblocks.push(first_el);
+			timeblocks = timeblocks;
+		}
+
+		return timeblocks;
+	}
 
 	function updateIncrement(increment: string) {
-		let increment_arc: number;
+		let num_arcs: number;
 		switch (increment) {
 			case '+0100':
-				increment_arc = 24;
-				increment_idx = 4;
+				num_arcs = 24;
+				inc_idx_offset = 4;
 				break;
 			case '+0030':
-				increment_arc = 48;
-				increment_idx = 2;
+				num_arcs = 48;
+				inc_idx_offset = 2;
 				break;
 			case '+0015':
-				increment_arc = 96;
-				increment_idx = 1;
+				num_arcs = 96;
+				inc_idx_offset = 1;
 				break;
 			default:
-				increment_arc = 24;
-				increment_idx = 4;
+				num_arcs = 24;
+				inc_idx_offset = 4;
 		}
-		return [increment_arc, increment_idx];
+		return [num_arcs, inc_idx_offset];
 	}
 
 	let size = 280;
@@ -53,13 +72,13 @@
 
 	$: {
 		increment_arr = updateIncrement(increment);
-		increment_arc = increment_arr[0];
-		increment_idx = increment_arr[1];
+		num_arcs = increment_arr[0];
+		inc_idx_offset = increment_arr[1];
 	}
 
 	const sketch: Sketch = (p5) => {
 		p5.setup = () => {
-			p5.createCanvas(width * 1.1, height * 1.1);
+			p5.createCanvas(width * 1.1, height * 2.1);
 			p5.background(offwhite);
 			// p5.noStroke();
 			p5.stroke(offblack);
@@ -72,34 +91,114 @@
 		};
 
 		p5.draw = () => {
-			let section = (2 * p5.PI) / increment_arc;
+			drawClock();
+		};
+
+		function drawClock() {
+			let arc_theta = (p5.TWO_PI / num_arcs) * 2;
+
+			let timeblock_idx: number = 0;
+			let arc_start: number;
+			let origin: Array<number> = [p5.width / 2, p5.height / 2];
+
+			for (let arc_ctr = 0; arc_ctr < num_arcs; arc_ctr++) {
+				timeblock_idx = arc_ctr * inc_idx_offset;
+				arc_start = -p5.PI / 2 + arc_theta * Number(clock_timeblocks[0].block.slice(0, 2)) + arc_theta * arc_ctr;
+
+				if (arc_ctr < num_arcs / 2) {
+					origin[0] = p5.width / 2;
+					origin[1] = (p5.height / 4) * 1;
+				} else {
+					origin[0] = p5.width / 2;
+					origin[1] = (p5.height / 4) * 3;
+				}
+
+				p5.push();
+				p5.translate(origin[0], origin[1]);
+
+				if (clock_timeblocks[timeblock_idx].active_on_timetable) {
+					p5.fill(clock_timeblocks[timeblock_idx].active_slot.color);
+				} else {
+					p5.fill(offwhite);
+				}
+
+				if (arc_ctr < num_arcs / 2) {
+					p5.arc(0, 0, width, height, arc_start, arc_start + arc_theta);
+				} else {
+					p5.arc(0, 0, width, height, arc_start, arc_start + arc_theta);
+				}
+
+				p5.pop();
+
+				arc_start += arc_theta;
+			}
 
 			let tick_len = size * 0.475;
 
-			let idx: number;
-			let start: number;
+			for (let arc_ctr = 0; arc_ctr < num_arcs; arc_ctr++) {
+				timeblock_idx = arc_ctr * inc_idx_offset;
+				arc_start = -p5.PI / 2 + arc_theta * Number(clock_timeblocks[0].block.slice(0, 2)) + arc_theta * arc_ctr;
 
-			start = -p5.PI / 2 + section * Number(timeblocks[0].block.slice(0, 2));
-			idx = 0;
+				if (arc_ctr < num_arcs / 2) {
+					origin[0] = p5.width / 2;
+					origin[1] = (p5.height / 4) * 1;
+				} else {
+					origin[0] = p5.width / 2;
+					origin[1] = (p5.height / 4) * 3;
+				}
 
-			for (let ctr = 0; ctr < increment_arc; ctr++) {
-				p5.fill(timeblocks[idx % timeblocks.length].active_slot.color);
-				p5.arc(p5.width / 2, p5.height / 2, width, height, start, start + section);
-
-				idx += increment_idx;
-				start += section;
-			}
-
-			start = -p5.PI / 2 + section * Number(timeblocks[0].block.slice(0, 2));
-
-			for (let ctr = 0; ctr < increment_arc; ctr++) {
 				p5.push();
-				p5.translate(p5.width / 2, p5.height / 2);
-				p5.line(tick_len * p5.cos(start), tick_len * p5.sin(start), (width / 2) * p5.cos(start), (height / 2) * p5.sin(start));
+				p5.translate(origin[0], origin[1]);
+
+				p5.line(tick_len * p5.cos(arc_start), tick_len * p5.sin(arc_start), (width / 2) * p5.cos(arc_start), (height / 2) * p5.sin(arc_start));
+
 				p5.pop();
-				start += section;
 			}
-		};
+
+			for (let arc_ctr = 0; arc_ctr < num_arcs; arc_ctr++) {
+				let am_pm_offset: number = 0;
+				let timeblock_idx = arc_ctr * inc_idx_offset;
+				arc_start = -p5.PI / 2 + arc_theta * Number(clock_timeblocks[0].block.slice(0, 2)) + arc_theta * arc_ctr;
+
+				if (arc_ctr < num_arcs / 2) {
+					am_pm_offset = 0;
+					origin[0] = p5.width / 2;
+					origin[1] = (p5.height / 4) * 1;
+				} else {
+					am_pm_offset = num_arcs / 2;
+					origin[0] = p5.width / 2;
+					origin[1] = (p5.height / 4) * 3;
+				}
+
+				p5.push();
+				p5.translate(origin[0], origin[1]);
+
+				let curr_active_slot_name: string = clock_timeblocks[timeblock_idx].active_slot.name;
+				let next_timeblock_idx: number = (((arc_ctr + 1) % (num_arcs / 2)) + am_pm_offset) * inc_idx_offset;
+				let next_active_slot_name: string = clock_timeblocks[next_timeblock_idx].active_slot.name;
+
+				if (curr_active_slot_name != next_active_slot_name) {
+					p5.line(0, 0, (width / 2) * p5.cos(arc_start + arc_theta), (height / 2) * p5.sin(arc_start + arc_theta));
+				}
+
+				p5.pop();
+			}
+
+			// arc_start = -p5.PI / 2 + arc_theta * Number(clock_timeblocks[0].block.slice(0, 2));
+			// p5.push();
+			// p5.translate(p5.width / 2, (p5.height / 4) * 1);
+			// p5.line(0, 0, (width / 2) * p5.cos(arc_start), (height / 2) * p5.sin(arc_start));
+			// p5.pop();
+
+			// p5.push();
+			// p5.translate(p5.width / 2, (p5.height / 4) * 3);
+			// p5.line(0, 0, (width / 2) * p5.cos(arc_start), (height / 2) * p5.sin(arc_start));
+			// p5.pop();
+
+			p5.fill(offblack);
+			p5.circle(p5.width / 2, (p5.height / 4) * 1, 7.5);
+			p5.circle(p5.width / 2, (p5.height / 4) * 3, 7.5);
+		}
 	};
 </script>
 

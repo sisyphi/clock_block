@@ -51,7 +51,7 @@
 	}
 
 	const sketch: Sketch = (p5) => {
-		let size: number = 280;
+		let size: number = 250;
 		let offwhite: string = '#E8E5DE';
 		let offblack: string = '#333333';
 
@@ -101,6 +101,7 @@
 				p5.line(mark_len * p5.cos(arc_start), mark_len * p5.sin(arc_start), (size / 2) * p5.cos(arc_start), (size / 2) * p5.sin(arc_start));
 			}
 
+			// Creates the slot borders on the clock
 			for (let arc_ctr = 0; arc_ctr < num_arcs; arc_ctr++) {
 				timeblock_idx = arc_ctr * inc_idx_offset;
 				arc_start = start_theta + arc_ctr * arc_theta;
@@ -113,6 +114,7 @@
 				}
 			}
 
+			// Creates the center dot to indicate the hands
 			p5.fill(offblack);
 			p5.circle(0, 0, 7.5);
 

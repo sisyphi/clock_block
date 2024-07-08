@@ -170,8 +170,8 @@
 			<BlockBuilder bind:blocks bind:increment bind:start_block bind:end_block></BlockBuilder>
 		</div>
 
-		<div class="justify-around max-w-md mx-auto md:flex md:flex-row md:max-w-2xl md:gap-4">
-			<div class="md:w-1/2 md:flex md:flex-col">
+		<div class="justify-around max-w-md mx-auto md:flex md:flex-row md:max-w-2xl md:gap-4 max-h-96">
+			<div class="px-2 py-4 overflow-scroll border-2 rounded-sm md:w-1/2 md:flex md:flex-col border-offblack overscroll-contain">
 				{#each timeblocks as timeblock}
 					{#if timeblock.active_on_timetable}
 						<div class="flex flex-row gap-2 mb-2">
@@ -193,15 +193,15 @@
 				{/each}
 			</div>
 
-			<div class="md:w-1/2">
+			<div class="px-2 py-4 overflow-scroll border-2 rounded-sm md:w-1/2 border-offblack overscroll-contain">
 				<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 			</div>
 		</div>
 	</div>
-</section>
-<section>
-	<div class="flex flex-row justify-center mx-auto">
-		<Clock12H bind:timeblocks={am_timeblocks} {increment}></Clock12H>
-		<Clock12H bind:timeblocks={pm_timeblocks} {increment}></Clock12H>
+	<div class="px-6 md:px-8">
+		<div class="flex flex-col justify-around max-w-md mx-auto md:flex-row md:max-w-2xl md:gap-4 [&>div]:flex [&>div]:mx-auto">
+			<Clock12H bind:timeblocks={am_timeblocks} {increment}></Clock12H>
+			<Clock12H bind:timeblocks={pm_timeblocks} {increment}></Clock12H>
+		</div>
 	</div>
 </section>

@@ -3,7 +3,7 @@
 	import BlockBuilder from '$lib/components/Block_Builder.svelte';
 
 	import { Button } from 'bits-ui';
-	import Clock from '$lib/components/Clock.svelte';
+	import Clock12H from '$lib/components/Clock12H.svelte';
 
 	interface Slot {
 		name: string;
@@ -36,6 +36,10 @@
 	];
 
 	let timeblocks: Array<Timeblock> = createTimeblock(blocks, start_block, end_block);
+
+	let am_timeblocks: Array<Timeblock> = structuredClone(timeblocks).slice(0, timeblocks.length / 2);
+	let pm_timeblocks: Array<Timeblock> = structuredClone(timeblocks).slice(timeblocks.length / 2);
+
 	let active_slot: Slot = default_slot;
 
 	function createBlocks() {
@@ -144,6 +148,9 @@
 		timeblocks = updateTimeblocks(start_block, end_block, slots, timeblocks, increment);
 
 		timeblocks = shiftTimeblocks(timeblocks, start_block);
+
+		am_timeblocks = shiftTimeblocks(structuredClone(timeblocks), '0000').slice(0, timeblocks.length / 2);
+		pm_timeblocks = shiftTimeblocks(structuredClone(timeblocks), '0000').slice(timeblocks.length / 2);
 	}
 
 	function insertSlot(timeblock: Timeblock, active_slot: Slot) {
@@ -194,6 +201,7 @@
 </section>
 <section>
 	<div class="flex flex-row justify-center mx-auto">
-		<Clock {timeblocks} {increment}></Clock>
+		<Clock12H bind:timeblocks={am_timeblocks} {increment}></Clock12H>
+		<Clock12H bind:timeblocks={pm_timeblocks} {increment}></Clock12H>
 	</div>
 </section>

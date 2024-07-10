@@ -170,9 +170,6 @@
 	</div>
 
 	<div class="flex flex-col justify-around gap-4 mx-auto sm:flex-row md:max-w-2xl">
-		<div class="px-2 py-4 overflow-scroll border-2 rounded-sm sm:w-1/2 border-offblack overscroll-contain max-h-64 sm:max-h-96">
-			<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
-		</div>
 		<div class="px-2 py-4 overflow-scroll border-2 rounded-sm sm:w-1/2 md:w-1/2 sm:flex sm:flex-col border-offblack overscroll-contain max-h-64 sm:max-h-96">
 			{#each timeblocks as timeblock}
 				{#if timeblock.active_on_timetable}
@@ -194,9 +191,13 @@
 				{/if}
 			{/each}
 		</div>
+
+		<div class="px-2 py-4 overflow-scroll border-2 rounded-sm sm:w-1/2 border-offblack overscroll-contain max-h-64 sm:max-h-96">
+			<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
+		</div>
 	</div>
-	<div class="flex flex-col justify-around max-w-md mx-auto sm:flex-row sm:max-w-2xl md:gap-4 [&>div]:flex [&>div]:mx-auto">
+	<!-- <div class="flex flex-col justify-around max-w-md mx-auto sm:flex-row sm:max-w-2xl md:gap-4 [&>div]:flex [&>div]:mx-auto">
 		<Clock12H bind:timeblocks={am_timeblocks} {increment}></Clock12H>
 		<Clock12H bind:timeblocks={pm_timeblocks} {increment}></Clock12H>
-	</div>
+	</div> -->
 </div>

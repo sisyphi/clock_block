@@ -110,78 +110,74 @@
 	$: blocks = updateBlocks(increment);
 </script>
 
-<section class="px-6 md:px-8">
-	<div class="flex flex-col justify-between gap-2 mx-auto md:flex-row md:max-w-2xl">
-		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
-			<div class="">
-				<Select.Root bind:selected={start_block_item}>
-					<Select.Trigger
-						aria-label="Select a start time"
-						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-black border-2 rounded-sm bg-offwhite min-w-52 border-offblack hover:bg-offblack hover:text-offwhite"
-					>
-						<Select.Value placeholder="Select a start time" />
-						<CaretUpDown class="size-6" />
-					</Select.Trigger>
+<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
+	<div class="">
+		<Select.Root bind:selected={start_block_item}>
+			<Select.Trigger
+				aria-label="Select a start time"
+				class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-black border-2 rounded-sm bg-offwhite min-w-52 border-offblack hover:bg-offblack hover:text-offwhite"
+			>
+				<Select.Value placeholder="Select a start time" />
+				<CaretUpDown class="size-6" />
+			</Select.Trigger>
 
-					<Select.Content class="p-2 my-2 overflow-scroll border-2 rounded-sm outline-none bg-offwhite border-offblack max-h-64">
-						{#each start_block_items as start_time}
-							<Select.Item
-								value={start_time.value}
-								label={start_time.label}
-								class="flex flex-row items-center justify-between p-2 rounded-sm cursor-pointer hover:bg-offblack hover:text-offwhite"
-							>
-								<Label.Root for={start_time.value}>{start_time.label}</Label.Root>
-								<Select.ItemIndicator>
-									<Check class="size-6" />
-								</Select.ItemIndicator>
-							</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
-			</div>
-			<div class="">
-				<Select.Root bind:selected={end_block_item}>
-					<Select.Trigger
-						aria-label="Select an end time"
-						class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-black border-2 rounded-sm bg-offwhite min-w-52 border-offblack hover:bg-offblack hover:text-offwhite"
+			<Select.Content class="p-2 my-2 overflow-scroll border-2 rounded-sm outline-none bg-offwhite border-offblack max-h-64">
+				{#each start_block_items as start_time}
+					<Select.Item
+						value={start_time.value}
+						label={start_time.label}
+						class="flex flex-row items-center justify-between p-2 rounded-sm cursor-pointer hover:bg-offblack hover:text-offwhite"
 					>
-						<Select.Value placeholder="Select an end time" />
-						<CaretUpDown class="size-6" />
-					</Select.Trigger>
-
-					<Select.Content class="p-2 my-2 overflow-scroll border-2 rounded-sm outline-none bg-offwhite border-offblack max-h-64">
-						{#each end_block_items as end_time}
-							<Select.Item
-								value={end_time.value}
-								label={end_time.label}
-								class="flex flex-row items-center justify-between p-2 rounded-sm cursor-pointer hover:bg-offblack hover:text-offwhite"
-							>
-								<Label.Root for={end_time.value}>{end_time.label}</Label.Root>
-								<Select.ItemIndicator>
-									<Check class="size-6" />
-								</Select.ItemIndicator>
-							</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
-			</div>
-		</div>
-		<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
-			<div class="">
-				<RadioGroup.Root bind:value={increment} class="flex flex-row justify-center p-1 mx-auto border-2 rounded-sm bg-offwhite border-offblack w-fit text-offblack">
-					{#each INCREMENTS as increment}
-						<RadioGroup.Item
-							id={increment.id}
-							value={increment.value}
-							class="flex flex-row items-center px-2 rounded-sm hover:text-offwhite hover:bg-offblack [&[data-state=checked]>svg]:hidden"
-						>
-							<RadioUnchecked />
-							<RadioGroup.ItemIndicator><RadioChecked /></RadioGroup.ItemIndicator>
-							<Label.Root for={increment.id}>{increment.label}</Label.Root>
-						</RadioGroup.Item>
-					{/each}
-				</RadioGroup.Root>
-			</div>
-		</div>
+						<Label.Root for={start_time.value}>{start_time.label}</Label.Root>
+						<Select.ItemIndicator>
+							<Check class="size-6" />
+						</Select.ItemIndicator>
+					</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
 	</div>
-</section>
+	<div class="">
+		<Select.Root bind:selected={end_block_item}>
+			<Select.Trigger
+				aria-label="Select an end time"
+				class="flex flex-row items-center justify-between gap-2 px-2 py-1 mx-auto text-black border-2 rounded-sm bg-offwhite min-w-52 border-offblack hover:bg-offblack hover:text-offwhite"
+			>
+				<Select.Value placeholder="Select an end time" />
+				<CaretUpDown class="size-6" />
+			</Select.Trigger>
+
+			<Select.Content class="p-2 my-2 overflow-scroll border-2 rounded-sm outline-none bg-offwhite border-offblack max-h-64">
+				{#each end_block_items as end_time}
+					<Select.Item
+						value={end_time.value}
+						label={end_time.label}
+						class="flex flex-row items-center justify-between p-2 rounded-sm cursor-pointer hover:bg-offblack hover:text-offwhite"
+					>
+						<Label.Root for={end_time.value}>{end_time.label}</Label.Root>
+						<Select.ItemIndicator>
+							<Check class="size-6" />
+						</Select.ItemIndicator>
+					</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+	</div>
+</div>
+<div class="flex flex-row flex-wrap justify-center gap-2 mx-auto md:m-0 md:justify-normal">
+	<div class="">
+		<RadioGroup.Root bind:value={increment} class="flex flex-row justify-center p-1 mx-auto border-2 rounded-sm bg-offwhite border-offblack w-fit text-offblack">
+			{#each INCREMENTS as increment}
+				<RadioGroup.Item
+					id={increment.id}
+					value={increment.value}
+					class="flex flex-row items-center px-2 rounded-sm hover:text-offwhite hover:bg-offblack [&[data-state=checked]>svg]:hidden"
+				>
+					<RadioUnchecked />
+					<RadioGroup.ItemIndicator><RadioChecked /></RadioGroup.ItemIndicator>
+					<Label.Root for={increment.id}>{increment.label}</Label.Root>
+				</RadioGroup.Item>
+			{/each}
+		</RadioGroup.Root>
+	</div>
+</div>

@@ -51,7 +51,7 @@
 	}
 
 	const sketch: Sketch = (p5) => {
-		let size: number = 250;
+		let size: number = 200;
 		let offwhite: string = '#E8E5DE';
 		let offblack: string = '#333333';
 

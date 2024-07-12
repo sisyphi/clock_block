@@ -20,6 +20,8 @@
 	let num_arcs: number;
 	let inc_idx_offset: number;
 
+	export let size: number = 300;
+
 	function updateIncrement(increment: string) {
 		let num_arcs: number;
 		let inc_idx_offset: number;
@@ -51,7 +53,6 @@
 	}
 
 	const sketch: Sketch = (p5) => {
-		let size: number = 200;
 		let offwhite: string = '#E8E5DE';
 		let offblack: string = '#333333';
 
@@ -69,6 +70,10 @@
 		};
 
 		p5.draw = () => {
+			p5.createCanvas(size * 1.1, size * 1.1);
+
+			p5.background(offwhite);
+
 			drawClock();
 		};
 

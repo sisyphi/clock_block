@@ -25,7 +25,7 @@
 
 	let default_slot: Slot = {
 		name: 'Default',
-		color: '#d3d3d3'
+		color: '#B1B1B1'
 	};
 
 	let slots: Array<Slot> = [
@@ -41,6 +41,10 @@
 	let pm_timeblocks: Array<Timeblock> = structuredClone(timeblocks).slice(timeblocks.length / 2);
 
 	let active_slot: Slot = default_slot;
+
+	let clock_size: number = 300;
+	let size: number;
+	$: size = clock_size / 2.5;
 
 	function createBlocks() {
 		let blocks: Array<string> = [];
@@ -165,12 +169,12 @@
 </script>
 
 <div class="w-full h-full px-6 md:px-8">
-	<div class="flex flex-col justify-between max-w-md gap-2 py-4 mx-auto md:flex-row md:max-w-2xl">
+	<div class="flex flex-col justify-between gap-2 py-4 mx-auto xs:max-w-2xl xs:flex-row">
 		<BlockBuilder bind:blocks bind:increment bind:start_block bind:end_block></BlockBuilder>
 	</div>
 
-	<div class="flex flex-col justify-around gap-4 mx-auto sm:flex-row md:max-w-2xl">
-		<div class="px-2 py-4 overflow-scroll border-2 rounded-sm sm:w-1/2 md:w-1/2 sm:flex sm:flex-col border-offblack overscroll-contain max-h-64 sm:max-h-96">
+	<div class="flex flex-col justify-around max-w-sm gap-4 mx-auto sm:flex-row sm:max-w-2xl">
+		<div class="px-2 py-4 pr-4 overflow-scroll border-2 rounded-sm sm:w-1/2 md:w-1/2 sm:flex sm:flex-col border-offblack overscroll-contain max-h-64 sm:max-h-96">
 			{#each timeblocks as timeblock}
 				{#if timeblock.active_on_timetable}
 					<div class="flex flex-row gap-2 mb-2">
@@ -192,12 +196,12 @@
 			{/each}
 		</div>
 
-		<div class="px-2 py-4 overflow-scroll border-2 rounded-sm sm:w-1/2 border-offblack overscroll-contain max-h-64 sm:max-h-96">
+		<div class="px-2 py-4 pr-4 overflow-scroll border-2 rounded-sm sm:w-1/2 border-offblack overscroll-contain max-h-64 sm:max-h-96">
 			<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 		</div>
 	</div>
-	<!-- <div class="flex flex-col justify-around max-w-md mx-auto sm:flex-row sm:max-w-2xl md:gap-4 [&>div]:flex [&>div]:mx-auto">
-		<Clock12H bind:timeblocks={am_timeblocks} {increment}></Clock12H>
-		<Clock12H bind:timeblocks={pm_timeblocks} {increment}></Clock12H>
-	</div> -->
+	<div bind:clientWidth={clock_size} class="flex flex-col justify-around mx-auto sm:flex-row sm:max-w-2xl md:gap-4 [&>div]:flex [&>div]:mx-auto">
+		<Clock12H bind:timeblocks={am_timeblocks} {increment} {size}></Clock12H>
+		<Clock12H bind:timeblocks={pm_timeblocks} {increment} {size}></Clock12H>
+	</div>
 </div>

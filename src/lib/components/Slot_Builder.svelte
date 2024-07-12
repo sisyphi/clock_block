@@ -17,7 +17,7 @@
 
 	export let default_slot: Slot = {
 		name: 'Default',
-		color: '#E8E5DE'
+		color: '#B1B1B1'
 	};
 
 	export let slots: Array<Slot> = [

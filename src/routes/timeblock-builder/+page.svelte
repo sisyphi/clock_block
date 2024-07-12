@@ -44,7 +44,7 @@
 
 	let clock_size: number = 300;
 	let size: number;
-	$: size = clock_size / 2.5;
+	$: size = clock_size * 0.4;
 
 	function createBlocks() {
 		let blocks: Array<string> = [];
@@ -200,8 +200,12 @@
 			<SlotBuilder bind:default_slot bind:slots bind:active_slot></SlotBuilder>
 		</div>
 	</div>
-	<div bind:clientWidth={clock_size} class="flex flex-col justify-around mx-auto sm:flex-row sm:max-w-2xl md:gap-4 [&>div]:flex [&>div]:mx-auto">
+</div>
+<div bind:clientWidth={clock_size} class="grid justify-center w-full grid-cols-10 mx-auto sm:max-w-2xl grid-rows-10 sm:flex-row">
+	<div class="col-start-1 col-end-8 row-start-5 mx-auto row-end-11">
 		<Clock12H bind:timeblocks={am_timeblocks} {increment} {size}></Clock12H>
+	</div>
+	<div class="col-start-4 col-end-11 row-start-1 row-end-7 mx-auto">
 		<Clock12H bind:timeblocks={pm_timeblocks} {increment} {size}></Clock12H>
 	</div>
 </div>

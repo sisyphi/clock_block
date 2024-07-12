@@ -59,20 +59,19 @@
 		p5.setup = () => {
 			p5.createCanvas(size * 1.1, size * 1.1);
 
-			p5.background(offwhite);
 			p5.fill(offwhite);
 
 			p5.stroke(offblack);
-			p5.strokeWeight(2);
 			p5.strokeCap(p5.ROUND);
 
 			p5.pixelDensity(10);
 		};
 
 		p5.draw = () => {
-			p5.createCanvas(size * 1.1, size * 1.1);
+			// p5.createCanvas(size * 1.1, size * 1.1);
 
-			p5.background(offwhite);
+			p5.strokeWeight(2);
+			p5.pixelDensity(10);
 
 			drawClock();
 		};
